@@ -1,0 +1,155 @@
+plugins {
+	id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+	id 'org.ajoberstar.grgit' version '3.1.1'
+	id 'java'
+	id "eclipse"
+}
+
+group = 'easymaster'
+version = '1.0.0'
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+apply plugin: 'java-library'
+apply plugin: 'io.spring.dependency-management'
+
+repositories {
+	mavenCentral()
+}
+
+ext {
+    gitRevision = grgit.head().id
+    gitAbbRevision = grgit.head().abbreviatedId
+    project.version = "${project.version}-${gitAbbRevision}" 
+}
+
+tasks.withType( JavaCompile) {
+    options.compilerArgs << "-Xlint:deprecation"
+}
+
+jar {
+    enabled = true
+}
+
+bootJar {
+    classifier = 'boot'
+    launchScript {
+        script = file('src/main/resources/launch.script')
+        properties 'confFolder': '../config'
+        properties 'logFolder': './logs'
+        properties 'pidFolder': './logs'
+        properties 'logFilename': 'transfer-file-service.log'
+        properties 'pidFilename': 'transfer-file-service.pid'
+    }
+}
+
+bootRun {
+    args = ["--spring.profiles.active=bootRun",
+            "--spring.jmx.enabled=true",
+             "--logging.level.root=INFO",
+             "--spring.config.location=./config/transfer-file.yml"]
+    systemProperties System.properties
+    jvmArgs = ["-Dlogging.level.easymaster=TRACE"]
+}
+
+task distProd( type: Zip) {
+    dependsOn build
+    archiveClassifier = 'prod'
+    destinationDirectory = file( 'dist')
+    into( '/') {
+        from ( project.file( './')) {
+            include( 'agent-boot.sh')
+            include( 'agent-boot.bat')
+            fileMode = 0755
+        }
+        from (project.file( './')) {
+            include( 'README.md')
+        }
+    }
+    into( 'lib/') {
+        from bootJar
+        rename { project.name + '.jar'}
+        fileMode = 0755
+    }
+    into( 'config/') {
+        from ( project.file( './config')) {
+            include( 'custom-context.xml')
+            include( project.name + '.conf')
+            include( project.name + '.yml')
+        }
+        from ( project.file( './src/main/resources')) {
+            include( 'executable.conf')
+            rename { project.name + '.conf'}
+        }
+    }
+    into( '/') {
+        from ( project.file( './winsw')) {
+            include( '*.exe')
+            fileMode = 0755
+        }
+    }
+    into( 'winsw/') {
+        from ( project.file( './winsw')) {
+            include( '*.xml')
+        }
+    }
+}
+
+task testFile( type: Copy) {
+    from ( project.file( './src/test/resources/parallel-content.zip'))
+    into ( 'dist')
+}
+
+task dist( type: Zip) {
+    dependsOn distProd
+    dependsOn testFile
+    archiveClassifier = 'client'
+    destinationDirectory = file( 'dist')
+    into( 'lib/') {
+        from configurations.runtimeClasspath {
+            include( 'netty-all-4.1.24.Final.jar')
+            include( 'slf4j-api-1.7.30.jar')
+            include( 'logback-core-1.2.3.jar')
+            include( 'logback-classic-1.2.3.jar')
+            include( 'spring-core-5.2.5.RELEASE.jar')
+            include( 'spring-boot-2.2.6.RELEASE.jar')
+            include( 'spring-boot-actuator-2.2.6.RELEASE.jar')
+        }
+    }
+    into( 'lib/') {
+        from jar
+        rename { project.name + '-client.jar'}
+    }
+    into( 'lib/') {
+        from ( project.file( './src/test/resources')) {
+            include( 'logback.xml')
+        }
+    }
+    into( '/') {
+        from ( project.file( './src/test/resources')) {
+//            include( 'parallel-content.zip')
+            include( 'TESTME.md')
+        }
+    }
+}
+
+task deleteDist( type: Delete){
+    delete( project.file("dist"))
+}
+
+clean.finalizedBy( deleteDist)
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'io.netty:netty-all:4.1.24.Final'
+	
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+test {
+    useJUnitPlatform {
+        includeEngines 'junit-vintage'
+    }
+    testLogging.showStandardStreams = true
+}

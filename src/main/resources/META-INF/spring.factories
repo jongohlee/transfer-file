@@ -1,0 +1,8 @@
+
+# Environment Post Processors
+org.springframework.boot.env.EnvironmentPostProcessor=\
+easymaster.transfer.file.config.TransferEnvironmentPostProcessor
+
+# Application listeners
+org.springframework.context.ApplicationListener=\
+easymaster.transfer.file.config.TransferEnvironmentPostProcessor

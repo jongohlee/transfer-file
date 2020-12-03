@@ -1,0 +1,14 @@
+<service>
+    <id>transfer-file</id>
+    <name>transfer-file</name>
+    <description>This service runs Transfer File Server.</description>
+    <env name="AGENT_HOME" value="%BASE%"/>
+    <executable>java</executable>
+    <arguments>-XX:+UseG1GC -Xms1024m -Xmx4096m -jar "%BASE%\lib\transfer-file.jar" --spring.config.location=%BASE%\config\transfer-file.yml --context.location=file:%BASE%\config --logging.file=%BASE%\logs\transfer-file.log</arguments>
+    <workingdirectory>%BASE%</workingdirectory>
+    <stoptimeout>5 sec</stoptimeout>
+    <startmode>Automatic</startmode>
+    <delayedAutoStart/>
+    <logpath>%BASE%\logs</logpath>
+    <logmode>rotate</logmode>
+</service>

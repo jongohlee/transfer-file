@@ -1,0 +1,62 @@
+spring:
+  main:
+    web-application-type: none
+    banner-mode: "off"
+  application:
+    name: transfer-file
+    
+logging:
+  file: logs/transfer-file.log
+  level: 
+    root: INFO
+    org.springframework: INFO
+    io.netty: INFO
+    easymaster: DEBUG
+
+context:
+   location: file:./config # fixed, can not edit
+
+management:
+  endpoint:
+    shutdown: 
+      enabled: true
+        
+transfer:
+  connect-timeout: 2s
+  session-timeout: 30M
+  transfer-timeout: 120M
+  ssl: on
+  bind: 127.0.0.1
+  tcp-port: 8024
+  boss-count: 1
+  worker-count: 15
+  keep-alive: true
+  backlog: 100
+  chunk-size: 1048576 # 1M
+  validation: on
+
+  repository:
+    base-dir: /home/easymaster/Workspace/transfer
+#    base-dir: /Workspace/Repositories/transfer
+    backup-dir: ${transfer.repository.base-dir}/backup
+    sites:
+      biz1:
+        name: siteOfBiz1
+        base-dir: ${transfer.repository.base-dir}/biz1
+        backup-dir: ${transfer.repository.base-dir}/biz1/backup
+      biz2:
+        name: siteOfBiz2
+        base-dir: ${transfer.repository.base-dir}/biz2
+        backup-dir: ${transfer.repository.base-dir}/biz2/backup
+      biz3:
+        name: siteOfBiz3
+        base-dir: ${transfer.repository.base-dir}/biz3
+        backup-dir: ${transfer.repository.base-dir}/biz3/backup
+
+---
+
+spring:
+  profiles: bootRun
+
+context:
+  location: file:./config # fixed, can not edit
