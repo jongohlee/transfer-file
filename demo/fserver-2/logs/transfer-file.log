@@ -1,0 +1,365 @@
+2020-12-03 22:15:16.747  INFO 8776 --- [main] easymaster.transfer.file.TransferServer  : Starting TransferServer on LAPTOP-L5OVMH4A with PID 8776 (C:\Workspace\Repositories\transfer-file\demo\fserver-2\lib\transfer-file.jar started by NB-20022800 in C:\Workspace\Repositories\transfer-file\demo\fserver-2)
+2020-12-03 22:15:16.770 DEBUG 8776 --- [main] easymaster.transfer.file.TransferServer  : Running with Spring Boot v2.2.6.RELEASE, Spring v5.2.5.RELEASE
+2020-12-03 22:15:16.771  INFO 8776 --- [main] easymaster.transfer.file.TransferServer  : No active profile set, falling back to default profiles: default
+2020-12-03 22:15:18.116 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : basedir: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories
+2020-12-03 22:15:18.121 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : backupdir: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/backup
+2020-12-03 22:15:18.123 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site basedir: siteOfBiz1-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz1
+2020-12-03 22:15:18.124 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site backupdir: siteOfBiz1-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz1/backup
+2020-12-03 22:15:18.135 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site basedir: siteOfBiz2-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz2
+2020-12-03 22:15:18.136 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site backupdir: siteOfBiz2-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz2/backup
+2020-12-03 22:15:18.138 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site basedir: siteOfBiz3-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz3
+2020-12-03 22:15:18.139 DEBUG 8776 --- [main] e.t.file.config.TransferEnvironment      : site backupdir: siteOfBiz3-C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/biz3/backup
+2020-12-03 22:15:20.241  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : File Transfer Server is starting............................................
+2020-12-03 22:15:20.242  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : binding address : 127.0.0.1
+2020-12-03 22:15:20.242  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : binding port : 8025
+2020-12-03 22:15:20.243  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : boss cound : 1
+2020-12-03 22:15:20.243  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : worker count : 15
+2020-12-03 22:15:20.243  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : backlog : 100
+2020-12-03 22:15:20.243  INFO 8776 --- [main] e.t.f.c.TransferServerConfiguration      : keep-alive : true
+2020-12-03 22:15:20.595  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6] REGISTERED
+2020-12-03 22:15:20.598  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6] BIND: /127.0.0.1:8025
+2020-12-03 22:15:20.598  INFO 8776 --- [main] e.transfer.file.TransferServerAgent      : File Transfer Server is started ....................................................
+2020-12-03 22:15:20.599  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] ACTIVE
+2020-12-03 22:15:20.602 DEBUG 8776 --- [main] e.t.f.c.TransferServerConfiguration      : File Transfer Server is started [true].
+2020-12-03 22:15:20.618  INFO 8776 --- [main] easymaster.transfer.file.TransferServer  : Started TransferServer in 4.682 seconds (JVM running for 5.396)
+2020-12-03 22:15:20.621 DEBUG 8776 --- [server] e.t.f.c.TransferServerConfiguration      : File Transfer Server is listening on localhost:[8025]
+2020-12-03 22:19:21.505  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x2dbab942, L:/127.0.0.1:8025 - R:/127.0.0.1:57311]
+2020-12-03 22:19:21.507  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.537  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xbe0a24b5, L:/127.0.0.1:8025 - R:/127.0.0.1:57332]
+2020-12-03 22:19:21.538  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.582  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x70098231, L:/127.0.0.1:8025 - R:/127.0.0.1:57333]
+2020-12-03 22:19:21.582  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.831 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:21.835 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:21.836 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.file.handler.TransferServerHandler   : request command: ACTION
+2020-12-03 22:19:21.836 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:21.839  INFO 8776 --- [nioEventLoopGroup-3-3] e.t.file.handler.AbstractRequestHandler  : actionCommand request is accepted. from: [Client:127.0.0.1]
+2020-12-03 22:19:21.842  INFO 8776 --- [nioEventLoopGroup-3-3] e.transfer.file.session.ResourceSession  : Resource Session [4ce165e8-6ad5-49b8-ad82-64c7a13be241] is created.
+2020-12-03 22:19:21.842  INFO 8776 --- [nioEventLoopGroup-3-3] e.t.file.session.ResourceSessionManager  : resourceSession [4ce165e8-6ad5-49b8-ad82-64c7a13be241] is created
+2020-12-03 22:19:21.844 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+ACTION /session
+Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241
+Response-Code: 200 OK
+2020-12-03 22:19:21.846 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:21.849 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:21.849 DEBUG 8776 --- [nioEventLoopGroup-3-3] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:21.860  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x52a16938, L:/127.0.0.1:8025 - R:/127.0.0.1:57334]
+2020-12-03 22:19:21.861  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.862  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xc1b05ab6, L:/127.0.0.1:8025 - R:/127.0.0.1:57335]
+2020-12-03 22:19:21.862  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.864  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xeb95cbfc, L:/127.0.0.1:8025 - R:/127.0.0.1:57336]
+2020-12-03 22:19:21.865  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.866  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xa1172b80, L:/127.0.0.1:8025 - R:/127.0.0.1:57337]
+2020-12-03 22:19:21.867  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.867  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xee4f5e46, L:/127.0.0.1:8025 - R:/127.0.0.1:57338]
+2020-12-03 22:19:21.868  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.868  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x640a79eb, L:/127.0.0.1:8025 - R:/127.0.0.1:57339]
+2020-12-03 22:19:21.869  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.871  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x06cfb500, L:/127.0.0.1:8025 - R:/127.0.0.1:57340]
+2020-12-03 22:19:21.872  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.873  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x7dd71744, L:/127.0.0.1:8025 - R:/127.0.0.1:57341]
+2020-12-03 22:19:21.874  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.875  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xbde1b65d, L:/127.0.0.1:8025 - R:/127.0.0.1:57342]
+2020-12-03 22:19:21.876  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:21.890  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xc360316e, L:/127.0.0.1:8025 - R:/127.0.0.1:57343]
+2020-12-03 22:19:21.890  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:22.042 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57342/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.049 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57334/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F56b8a09d_e452_41fd_9b16_678ab4526980.split0?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.120 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57339/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2Fac194e71_47e4_4117_80d2_fa14af008cea.split3?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.127 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57335/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F422bcd25_45f1_4f82_8c56_08d9fec2b123.split4?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.205 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_15563710578294958608.tmp] is created.
+2020-12-03 22:19:22.206 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_4203085141882569667.tmp] is created.
+2020-12-03 22:19:22.236 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_12544260737855721548.tmp] is created.
+2020-12-03 22:19:22.237 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_13014063520565113220.tmp] is created.
+2020-12-03 22:19:22.379 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57341/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F149ccada_c992_4f5e_9908_0f8888dc940f.split6?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.393 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57338/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F75025827_742b_4765_bf59_3ea591f05244.split5?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.440 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57343/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F4141a119_0c86_40aa_9887_31babad4c1c1.split1?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:22.442 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_8440025266697082363.tmp] is created.
+2020-12-03 22:19:22.632 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_12164170971733837161.tmp] is created.
+2020-12-03 22:19:22.644 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_10793805859354713930.tmp] is created.
+2020-12-03 22:19:22.759 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57337/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F9f35f58d_476a_4552_9695_8ce26e263810.split7?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:23.011 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_14502812513053436345.tmp] is created.
+2020-12-03 22:19:23.229 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57340/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F55becd3b_076e_4699_bffb_082b5863bc82.split8?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:23.262 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.263 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.267 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4480109, Transfer-Source-Uri: agent://127.0.0.1:57336/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:23.282 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.282 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.282 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.283 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.284 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.286  INFO 8776 --- [nioEventLoopGroup-3-4] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.286  INFO 8776 --- [nioEventLoopGroup-3-13] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.289  INFO 8776 --- [nioEventLoopGroup-3-12] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.289 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/56b8a09d_e452_41fd_9b16_678ab4526980.split0
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/4141a119_0c86_40aa_9887_31babad4c1c1.split1
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.290 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.291 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.291 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/4141a119_0c86_40aa_9887_31babad4c1c1.split1
+2020-12-03 22:19:23.292 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2
+2020-12-03 22:19:23.292 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/56b8a09d_e452_41fd_9b16_678ab4526980.split0
+2020-12-03 22:19:23.368 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_777537882771951322.tmp] is created.
+2020-12-03 22:19:23.369 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_10269704107851640669.tmp] is created.
+2020-12-03 22:19:23.548 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.548 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.549 DEBUG 8776 --- [nioEventLoopGroup-3-12] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.lock
+2020-12-03 22:19:23.550 DEBUG 8776 --- [nioEventLoopGroup-3-12] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.lock with result: true
+2020-12-03 22:19:23.554 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.555 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.556 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.556 DEBUG 8776 --- [nioEventLoopGroup-3-12] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.579 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.579 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.580 DEBUG 8776 --- [nioEventLoopGroup-3-4] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\56b8a09d_e452_41fd_9b16_678ab4526980.lock
+2020-12-03 22:19:23.601 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.580 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.603 DEBUG 8776 --- [nioEventLoopGroup-3-4] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\56b8a09d_e452_41fd_9b16_678ab4526980.lock with result: true
+2020-12-03 22:19:23.603 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.622 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.623 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.623  INFO 8776 --- [nioEventLoopGroup-3-8] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.605 DEBUG 8776 --- [nioEventLoopGroup-3-13] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\4141a119_0c86_40aa_9887_31babad4c1c1.lock
+2020-12-03 22:19:23.605 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/56b8a09d_e452_41fd_9b16_678ab4526980.split0] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/56b8a09d_e452_41fd_9b16_678ab4526980.split0] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/75025827_742b_4765_bf59_3ea591f05244.split5
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-13] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\4141a119_0c86_40aa_9887_31babad4c1c1.lock with result: true
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/75025827_742b_4765_bf59_3ea591f05244.split5
+2020-12-03 22:19:23.624 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/4141a119_0c86_40aa_9887_31babad4c1c1.split1] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.625 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.625 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/4141a119_0c86_40aa_9887_31babad4c1c1.split1] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.625 DEBUG 8776 --- [nioEventLoopGroup-3-4] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.626 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.626 DEBUG 8776 --- [nioEventLoopGroup-3-13] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.627 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.627 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.627 DEBUG 8776 --- [nioEventLoopGroup-3-8] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\75025827_742b_4765_bf59_3ea591f05244.lock
+2020-12-03 22:19:23.628 DEBUG 8776 --- [nioEventLoopGroup-3-8] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\75025827_742b_4765_bf59_3ea591f05244.lock with result: true
+2020-12-03 22:19:23.628 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/75025827_742b_4765_bf59_3ea591f05244.split5] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.629 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/75025827_742b_4765_bf59_3ea591f05244.split5] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.630 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.630 DEBUG 8776 --- [nioEventLoopGroup-3-8] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.636 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.642 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.643 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.643  INFO 8776 --- [nioEventLoopGroup-3-5] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.643 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.643 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.644 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/422bcd25_45f1_4f82_8c56_08d9fec2b123.split4
+2020-12-03 22:19:23.644 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.644 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/422bcd25_45f1_4f82_8c56_08d9fec2b123.split4
+2020-12-03 22:19:23.652 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.653 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.653 DEBUG 8776 --- [nioEventLoopGroup-3-5] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\422bcd25_45f1_4f82_8c56_08d9fec2b123.lock
+2020-12-03 22:19:23.654 DEBUG 8776 --- [nioEventLoopGroup-3-5] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\422bcd25_45f1_4f82_8c56_08d9fec2b123.lock with result: true
+2020-12-03 22:19:23.654 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/422bcd25_45f1_4f82_8c56_08d9fec2b123.split4] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.655 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/422bcd25_45f1_4f82_8c56_08d9fec2b123.split4] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.656 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.656 DEBUG 8776 --- [nioEventLoopGroup-3-5] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.671 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.676 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.677 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.677  INFO 8776 --- [nioEventLoopGroup-3-9] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.678 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.678 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.678 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/ac194e71_47e4_4117_80d2_fa14af008cea.split3
+2020-12-03 22:19:23.678 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.678 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/ac194e71_47e4_4117_80d2_fa14af008cea.split3
+2020-12-03 22:19:23.681 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.681 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.681 DEBUG 8776 --- [nioEventLoopGroup-3-9] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\ac194e71_47e4_4117_80d2_fa14af008cea.lock
+2020-12-03 22:19:23.682 DEBUG 8776 --- [nioEventLoopGroup-3-9] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\ac194e71_47e4_4117_80d2_fa14af008cea.lock with result: true
+2020-12-03 22:19:23.683 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/ac194e71_47e4_4117_80d2_fa14af008cea.split3] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.683 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/ac194e71_47e4_4117_80d2_fa14af008cea.split3] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.684 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.684 DEBUG 8776 --- [nioEventLoopGroup-3-9] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.748 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.761 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.761 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.761  INFO 8776 --- [nioEventLoopGroup-3-11] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.762 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.762 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.762 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/149ccada_c992_4f5e_9908_0f8888dc940f.split6
+2020-12-03 22:19:23.762 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.763 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/149ccada_c992_4f5e_9908_0f8888dc940f.split6
+2020-12-03 22:19:23.765 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.765 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.766 DEBUG 8776 --- [nioEventLoopGroup-3-11] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\149ccada_c992_4f5e_9908_0f8888dc940f.lock
+2020-12-03 22:19:23.766 DEBUG 8776 --- [nioEventLoopGroup-3-11] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\149ccada_c992_4f5e_9908_0f8888dc940f.lock with result: true
+2020-12-03 22:19:23.767 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/149ccada_c992_4f5e_9908_0f8888dc940f.split6] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.767 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/149ccada_c992_4f5e_9908_0f8888dc940f.split6] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.768 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.768 DEBUG 8776 --- [nioEventLoopGroup-3-11] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.772  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0xd0459995, L:/127.0.0.1:8025 - R:/127.0.0.1:57344]
+2020-12-03 22:19:23.773  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:23.807 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.813 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.813 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.813  INFO 8776 --- [nioEventLoopGroup-3-7] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.814 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.814 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.814 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/9f35f58d_476a_4552_9695_8ce26e263810.split7
+2020-12-03 22:19:23.814 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.814 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/9f35f58d_476a_4552_9695_8ce26e263810.split7
+2020-12-03 22:19:23.818 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.818 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.818 DEBUG 8776 --- [nioEventLoopGroup-3-7] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\9f35f58d_476a_4552_9695_8ce26e263810.lock
+2020-12-03 22:19:23.819 DEBUG 8776 --- [nioEventLoopGroup-3-7] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\9f35f58d_476a_4552_9695_8ce26e263810.lock with result: true
+2020-12-03 22:19:23.820 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/9f35f58d_476a_4552_9695_8ce26e263810.split7] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.820 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/9f35f58d_476a_4552_9695_8ce26e263810.split7] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.821 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.822 DEBUG 8776 --- [nioEventLoopGroup-3-7] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.880 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Content-Length: 4, Transfer-Source-Uri: agent://127.0.0.1:57344/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2F0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10?deleteOnExit=true, Transfer-Encoding: chunked, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:23.882 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.transfer.file.protocol.FileData        : Temporary File[C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\tmp\FUp_14293585849847047905.tmp] is created.
+2020-12-03 22:19:23.883 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.885 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.886 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.886  INFO 8776 --- [nioEventLoopGroup-3-14] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.886 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.887 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.887 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10
+2020-12-03 22:19:23.887 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.887 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10
+2020-12-03 22:19:23.890 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.890 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.891 DEBUG 8776 --- [nioEventLoopGroup-3-14] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\0a5188eb_edc3_4878_89f8_f9e4fc69f105.lock
+2020-12-03 22:19:23.892 DEBUG 8776 --- [nioEventLoopGroup-3-14] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\0a5188eb_edc3_4878_89f8_f9e4fc69f105.lock with result: true
+2020-12-03 22:19:23.892 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.893 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.894 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.894 DEBUG 8776 --- [nioEventLoopGroup-3-14] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.936 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.942 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.942 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.942  INFO 8776 --- [nioEventLoopGroup-3-10] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.943 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.943 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.943 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/55becd3b_076e_4699_bffb_082b5863bc82.split8
+2020-12-03 22:19:23.943 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.943 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/55becd3b_076e_4699_bffb_082b5863bc82.split8
+2020-12-03 22:19:23.946 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.946 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.947 DEBUG 8776 --- [nioEventLoopGroup-3-10] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\55becd3b_076e_4699_bffb_082b5863bc82.lock
+2020-12-03 22:19:23.947 DEBUG 8776 --- [nioEventLoopGroup-3-10] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\55becd3b_076e_4699_bffb_082b5863bc82.lock with result: true
+2020-12-03 22:19:23.948 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/55becd3b_076e_4699_bffb_082b5863bc82.split8] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.948 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/55becd3b_076e_4699_bffb_082b5863bc82.split8] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.949 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.949 DEBUG 8776 --- [nioEventLoopGroup-3-10] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.967 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:23.973 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.handler.TransferServerHandler   : request command: PUT
+2020-12-03 22:19:23.974 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:23.974  INFO 8776 --- [nioEventLoopGroup-3-6] e.t.f.h.ResourceCommandRequestHandler    : resourceCommand request accepted, from: [Client:127.0.0.1]
+2020-12-03 22:19:23.974 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:23.974 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:23.975 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9
+2020-12-03 22:19:23.975 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.util.TransferMessageUtil        : decoded params: {deleteOnExit=[true]}
+2020-12-03 22:19:23.975 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.h.ResourceCommandRequestHandler    : put target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9
+2020-12-03 22:19:23.978 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.transfer.file.protocol.FileData        : FileData released.
+2020-12-03 22:19:23.978 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.transfer.file.protocol.FileData        : AgentFileData deallocated.
+2020-12-03 22:19:23.978 DEBUG 8776 --- [nioEventLoopGroup-3-6] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\89b038fb_86d5_43de_bff8_8ff0dfbbbc05.lock
+2020-12-03 22:19:23.979 DEBUG 8776 --- [nioEventLoopGroup-3-6] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\89b038fb_86d5_43de_bff8_8ff0dfbbbc05.lock with result: true
+2020-12-03 22:19:23.979 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+PUT /
+Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9] is transferred
+Response-Code: 200 OK
+2020-12-03 22:19:23.980 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file content [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9] is transferred, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:23.980 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:23.981 DEBUG 8776 --- [nioEventLoopGroup-3-6] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed
+2020-12-03 22:19:23.989  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ: [id: 0x93580e68, L:/127.0.0.1:8025 - R:/127.0.0.1:57345]
+2020-12-03 22:19:23.989  INFO 8776 --- [nioEventLoopGroup-2-1] io.netty.handler.logging.LoggingHandler  : [id: 0xbdfd3ee6, L:/127.0.0.1:8025] READ COMPLETE
+2020-12-03 22:19:24.047 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.protocol.TransferMessageDecoder    : decoded message headers TransferHeaders[Session-Id: 4ce165e8-6ad5-49b8-ad82-64c7a13be241, Transfer-Source-Uri: agent://127.0.0.1:57345/parallel-content.zip, Transfer-Destination-Uri: agent://127.0.0.1:8025/20201010%2Fparallel-content.zip?interceptor=simpleCustomReceiveInterceptor&createAck=.done&onExist=overwriteOnExist, Merge-Resource: /20201010/98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2, Merge-Resource: /20201010/ac194e71_47e4_4117_80d2_fa14af008cea.split3, Merge-Resource: /20201010/56b8a09d_e452_41fd_9b16_678ab4526980.split0, Merge-Resource: /20201010/75025827_742b_4765_bf59_3ea591f05244.split5, Merge-Resource: /20201010/4141a119_0c86_40aa_9887_31babad4c1c1.split1, Merge-Resource: /20201010/149ccada_c992_4f5e_9908_0f8888dc940f.split6, Merge-Resource: /20201010/9f35f58d_476a_4552_9695_8ce26e263810.split7, Merge-Resource: /20201010/422bcd25_45f1_4f82_8c56_08d9fec2b123.split4, Merge-Resource: /20201010/0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10, Merge-Resource: /20201010/55becd3b_076e_4699_bffb_082b5863bc82.split8, Merge-Resource: /20201010/89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Client]
+2020-12-03 22:19:24.048 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.handler.TransferServerHandler   : LastTransferContent detected...
+2020-12-03 22:19:24.048 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.handler.TransferServerHandler   : request command: ACTION
+2020-12-03 22:19:24.048 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor preProcess ........................... executed
+2020-12-03 22:19:24.048  INFO 8776 --- [nioEventLoopGroup-3-15] e.t.file.handler.AbstractRequestHandler  : actionCommand request is accepted. from: [Client:127.0.0.1]
+2020-12-03 22:19:24.050 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.util.TransferMessageUtil        : decoded path: /parallel-content.zip
+2020-12-03 22:19:24.050 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.util.TransferMessageUtil        : decoded params: {}
+2020-12-03 22:19:24.050 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.util.TransferMessageUtil        : decoded path: /20201010/parallel-content.zip
+2020-12-03 22:19:24.050 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.util.TransferMessageUtil        : decoded params: {interceptor=[simpleCustomReceiveInterceptor], createAck=[.done], onExist=[overwriteOnExist]}
+2020-12-03 22:19:24.050 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.handler.AbstractRequestHandler  : merge target path: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/parallel-content.zip from: C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories
+2020-12-03 22:19:24.090 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\56b8a09d_e452_41fd_9b16_678ab4526980.split0 is merged
+2020-12-03 22:19:24.113 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\4141a119_0c86_40aa_9887_31babad4c1c1.split1 is merged
+2020-12-03 22:19:24.139 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2 is merged
+2020-12-03 22:19:24.164 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\ac194e71_47e4_4117_80d2_fa14af008cea.split3 is merged
+2020-12-03 22:19:24.188 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\422bcd25_45f1_4f82_8c56_08d9fec2b123.split4 is merged
+2020-12-03 22:19:24.205 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\75025827_742b_4765_bf59_3ea591f05244.split5 is merged
+2020-12-03 22:19:24.227 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\149ccada_c992_4f5e_9908_0f8888dc940f.split6 is merged
+2020-12-03 22:19:24.249 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\9f35f58d_476a_4552_9695_8ce26e263810.split7 is merged
+2020-12-03 22:19:24.263 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\55becd3b_076e_4699_bffb_082b5863bc82.split8 is merged
+2020-12-03 22:19:24.282 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9 is merged
+2020-12-03 22:19:24.283 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : file:C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10 is merged
+2020-12-03 22:19:24.283  INFO 8776 --- [nioEventLoopGroup-3-15] e.t.file.session.ResourceSessionManager  : resourceSession [4ce165e8-6ad5-49b8-ad82-64c7a13be241] is removed
+2020-12-03 22:19:24.283 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleCustomReceiveInterceptor   : custom interceptoer class easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor preReceive
+2020-12-03 22:19:24.286 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\56b8a09d_e452_41fd_9b16_678ab4526980.split0
+2020-12-03 22:19:24.287 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\56b8a09d_e452_41fd_9b16_678ab4526980.split0 with result: true
+2020-12-03 22:19:24.288 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\4141a119_0c86_40aa_9887_31babad4c1c1.split1
+2020-12-03 22:19:24.289 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\4141a119_0c86_40aa_9887_31babad4c1c1.split1 with result: true
+2020-12-03 22:19:24.289 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2
+2020-12-03 22:19:24.290 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\98da02ad_504c_42b7_bd1a_8c1b0b0c24aa.split2 with result: true
+2020-12-03 22:19:24.290 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\ac194e71_47e4_4117_80d2_fa14af008cea.split3
+2020-12-03 22:19:24.291 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\ac194e71_47e4_4117_80d2_fa14af008cea.split3 with result: true
+2020-12-03 22:19:24.291 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\422bcd25_45f1_4f82_8c56_08d9fec2b123.split4
+2020-12-03 22:19:24.292 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\422bcd25_45f1_4f82_8c56_08d9fec2b123.split4 with result: true
+2020-12-03 22:19:24.292 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\75025827_742b_4765_bf59_3ea591f05244.split5
+2020-12-03 22:19:24.293 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\75025827_742b_4765_bf59_3ea591f05244.split5 with result: true
+2020-12-03 22:19:24.293 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\149ccada_c992_4f5e_9908_0f8888dc940f.split6
+2020-12-03 22:19:24.294 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\149ccada_c992_4f5e_9908_0f8888dc940f.split6 with result: true
+2020-12-03 22:19:24.294 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\9f35f58d_476a_4552_9695_8ce26e263810.split7
+2020-12-03 22:19:24.295 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\9f35f58d_476a_4552_9695_8ce26e263810.split7 with result: true
+2020-12-03 22:19:24.296 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\55becd3b_076e_4699_bffb_082b5863bc82.split8
+2020-12-03 22:19:24.297 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\55becd3b_076e_4699_bffb_082b5863bc82.split8 with result: true
+2020-12-03 22:19:24.297 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9
+2020-12-03 22:19:24.298 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\89b038fb_86d5_43de_bff8_8ff0dfbbbc05.split9 with result: true
+2020-12-03 22:19:24.298 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Retrying attempt 0 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10
+2020-12-03 22:19:24.299 DEBUG 8776 --- [nioEventLoopGroup-3-15] easymaster.transfer.file.util.FileUtil   : Tried 1 to delete file: C:\Workspace\Repositories\transfer-file\demo\fserver-2\repositories\20201010\0a5188eb_edc3_4878_89f8_f9e4fc69f105.split10 with result: true
+2020-12-03 22:19:24.299 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.file.handler.AbstractRequestHandler  : requestCompletedResponse is sent: TransferMessage(decodeResult: success, content: null)
+ACTION /merge
+Reason: file [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/parallel-content.zip] is merged
+Response-Code: 200 OK
+2020-12-03 22:19:24.299 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.protocol.TransferMessageEncoder    : Agent Headers encoded. headers: [TransferHeaders[Reason: file [C:/Workspace/Repositories/transfer-file/demo/fserver-2/repositories/20201010/parallel-content.zip] is merged, Response-Code: 200 OK, Agent: 127.0.0.1, Remote: 127.0.0.1, Agent-Type: Agent]]
+2020-12-03 22:19:24.300 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleCustomReceiveInterceptor   : custom interceptoer class easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor postReceive
+2020-12-03 22:19:24.300 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleCustomReceiveInterceptor   : custom interceptoer class easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor afterCompletion
+2020-12-03 22:19:24.300 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor postProcess ........................... executed
+2020-12-03 22:19:24.300 DEBUG 8776 --- [nioEventLoopGroup-3-15] e.t.f.i.SimpleAgentInterceptor           : class easymaster.transfer.file.interceptors.SimpleAgentInterceptor interceptor afterCompletion ........................... executed

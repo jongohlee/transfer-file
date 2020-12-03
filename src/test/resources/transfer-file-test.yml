@@ -20,7 +20,7 @@ management:
       enabled: true
         
 transfer:
-  connect-timeout: 2s
+  connect-timeout: 5s
   transfer-timeout: 120M
   ssl: on
   bind: 127.0.0.1

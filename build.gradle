@@ -122,7 +122,7 @@ task dist( type: Zip) {
         rename { project.name + '-client.jar'}
     }
     into( 'lib/') {
-        from ( project.file( './src/test/resources')) {
+        from( project.file( './src/test/resources')) {
             include( 'logback.xml')
         }
     }
@@ -134,8 +134,33 @@ task dist( type: Zip) {
     }
 }
 
+task prepareDemo( type: Copy) {
+    dependsOn dist
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+    destinationDir = file( 'demo')
+    into( 'fserver-1') {
+        from zipTree( project.file( 'dist/' + project.name + '-' + project.version + '-prod.zip'))
+    }
+    into( 'fserver-2') {
+        from zipTree( project.file( 'dist/' + project.name + '-' + project.version + '-prod.zip'))
+    }
+    into( 'fserver-2/config') {
+        from( project.file( './src/test/resources/')) {
+            include( 'fixed-config.txt')
+            rename { project.name + '.yml'}
+        }
+    }
+    into( 'fserver-client') {
+        from zipTree( project.file( 'dist/' + project.name + '-' + project.version + '-client.zip'))
+    }
+    into( 'fserver-client') {
+        from( project.file( './src/test/resources/parallel-content.zip'))
+    }    
+}
+
 task deleteDist( type: Delete){
     delete( project.file("dist"))
+    delete( project.file("demo"))
 }
 
 clean.finalizedBy( deleteDist)

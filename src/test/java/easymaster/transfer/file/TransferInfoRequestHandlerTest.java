@@ -111,8 +111,8 @@ public class TransferInfoRequestHandlerTest
                             protected void channelRead0( ChannelHandlerContext ctx, TransferObject msg) throws Exception
                             {
 
-                                logger.debug( "reader message type: [{}]", msg.getClass());
-                                logger.debug( "readed message: [{}]", msg);
+//                                logger.debug( "reader message type: [{}]", msg.getClass());
+//                                logger.debug( "readed message: [{}]", msg);
 
                                 if( msg instanceof TransferMessage)
                                     response= (TransferMessage)msg;

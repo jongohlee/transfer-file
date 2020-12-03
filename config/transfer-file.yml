@@ -22,7 +22,7 @@ management:
       enabled: true
         
 transfer:
-  connect-timeout: 2s
+  connect-timeout: 5s
   session-timeout: 30M
   transfer-timeout: 120M
   ssl: on
