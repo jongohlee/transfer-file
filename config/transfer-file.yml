@@ -36,8 +36,7 @@ transfer:
   validation: on
 
   repository:
-    base-dir: /home/easymaster/Workspace/transfer
-#    base-dir: /Workspace/Repositories/transfer
+    base-dir: ./repositories
     backup-dir: ${transfer.repository.base-dir}/backup
     sites:
       biz1:
