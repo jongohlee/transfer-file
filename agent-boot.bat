@@ -13,32 +13,34 @@ set ERROR_CODE=0
 @setlocal
 
 @REM ==== START VALIDATION ====
-if not "%JAVA_HOME%" == "" goto OkJHome
+@REM if not "%JAVA_HOME%" == "" goto OkJHome
 
-echo.
-echo Error: JAVA_HOME not found in your environment. >&2
-echo Please set the JAVA_HOME variable in your environment to match the >&2
-echo location of your Java installation. >&2
-echo.
-goto error
+@REM echo.
+@REM echo Error: JAVA_HOME not found in your environment. >&2
+@REM echo Please set the JAVA_HOME variable in your environment to match the >&2
+@REM echo location of your Java installation. >&2
+@REM echo.
+@REM goto error
 
-:OkJHome
-if exist "%JAVA_HOME%\bin\java.exe" goto init
+@REM :OkJHome
+@REM if exist "%JAVA_HOME%\bin\java.exe" goto init
 
-echo.
-echo Error: JAVA_HOME is set to an invalid directory. >&2
-echo JAVA_HOME = "%JAVA_HOME%" >&2
-echo Please set the JAVA_HOME variable in your environment to match the >&2
-echo location of your Java installation. >&2
-echo.
-goto error
+@REM echo.
+@REM echo Error: JAVA_HOME is set to an invalid directory. >&2
+@REM echo JAVA_HOME = "%JAVA_HOME%" >&2
+@REM echo Please set the JAVA_HOME variable in your environment to match the >&2
+@REM echo location of your Java installation. >&2
+@REM echo.
+@REM goto error
 
 @REM ==== END VALIDATION ====
 
-:init
+@REM :init
 
 set APP_NAME=transfer-file
-set JAVA_EXEC=%JAVA_HOME%\bin\java
+@REM set JAVA_EXEC=%JAVA_HOME%\bin\java
+set JAVA_EXEC=java
+
 set APP_JAR=lib\transfer-file.jar
 set LOG_FILE="logs/transfer-file.log"
 set JAVA_OPTS=--spring.config.location=file:./config/transfer-file.yml --logging.file=%LOG_FILE% --spring.jmx.enabled=true -XX:+UseG1GC -Xms1024m -Xmx2048m

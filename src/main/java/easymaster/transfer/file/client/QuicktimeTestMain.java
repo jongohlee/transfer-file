@@ -315,7 +315,11 @@ public class QuicktimeTestMain
         try
         {
             Map<String, String> info= client.requestServerInfo( THROWAWAY);
-            logger.info( "result: {}", info);
+            info.entrySet().stream().forEach( e-> {
+                logger.info( "{} : {}", e.getKey(), e.getValue());
+            });
+            
+            //logger.info( "result: {}", info);
         }
         catch( Exception e){ logger.error( e.getMessage(), e);}
         finally{ client.shutdown();}

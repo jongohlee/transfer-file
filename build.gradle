@@ -89,7 +89,7 @@ task distProd( type: Zip) {
             fileMode = 0755
         }
     }
-    into( 'winsw/') {
+    into( '/') {
         from ( project.file( './winsw')) {
             include( '*.xml')
         }

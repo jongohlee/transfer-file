@@ -17,7 +17,8 @@ APP_JAR="lib/transfer-file.jar"
 LOG_FILE="logs/transfer-file.log"
 
 # java executable for spring boot app, change if you have multiple jdks installed
-JAVA_EXEC="$JAVA_HOME/bin/java"
+#JAVA_EXEC="$JAVA_HOME/bin/java"
+JAVA_EXEC=java
 JAVA_OPTS="--spring.config.location=file:./config/transfer-file.yml --logging.file=$LOG_FILE --spring.jmx.enabled=true -XX:+UseG1GC -Xms1024m -Xmx2048m"
 LOCK="logs/.lock"
 PID="logs/.pid"
@@ -46,9 +47,9 @@ start() {
 
     #pid_of_boot > /dev/null
     
-    RETVAL=$?
-    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
-    echo
+#    RETVAL=$?
+#    [ $RETVAL = 0 ] && success $"$STRING" || failure $"$STRING"
+#    echo
 
     [ $RETVAL = 0 ] && touch "$LOCK"
 }
