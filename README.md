@@ -287,7 +287,7 @@ Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
 | Resource-Length  | EXIST command 요청의 결과로 파일이 존재하는 경우 해당 파일의 길이  | Reason: EXIST<br>Resource-Length: 557 |
 | Deleted-Count  | DELETE command 요청에 따른 처리 결과 | Deleted-Count: 2<br>Reason: /agent/backup/20180717/check1.done<br>Reason: /agent/backup/20180717/check2.done |
 | Transferred-Resource  | TRANSFER command 요청에 따라 source agent에서 target agent로 전송된 결과 | Reason: 2 files are transferred, 0 files are failed<br>Transferred-Resource: /agent/2432345.dat<br>Transferred-Resource: /agent/32453.dat |
-| Transfer-Source-Uri  | 파일을 직접 전송하거나 다른 Agent로의 전송을 요청할 때 대상이 되는 리소스와 파마리터로 구성된 URI | Transfer-Source-Uri: agent://192.168.12.15:8025/fixed-content.txt?interceptor=simpleCustomTransferInterceptor&afterTransfer=backup |
+| Transfer-Source-Uri  | 파일을 직접 전송하거나 다른 Agent로의 전송을 요청할 때 대상이 되는 리소스와 파마리터로 구성된 URI | Transfer-Source-Uri: agent://192.168.12.15:8025/<br>fixed-content.txt?interceptor=simpleCustomTransferInterceptor&<br>afterTransfer=backup |
 | Transfer-Destination-Uri  | 파일을 직접 전송하거나 다른 Agent로의 전송을 요청할 때 수신위치에서 파일을 저장할 위치와 파마리터로 구성된 URI | Transfer-Destination-Uri: /backup/20101010/32345-content.bak?interceptor=simpleCustomReceiveInterceptor<br>&createAck=.done&onExist=overwriteOnExist |
 | Transfer-Interceptor  | TRANSFER command와 함께 전달되는 선후처리 항목으로, 처리를 담당할 bean 등록 이름을 interceptor에 지정<br>URI에 Parameter로 포함된 선후처리기는 송수신 Agent위치에서 송신과 수신 선후에 실행되며 헤더에 포함된 선후처리  항목은 TRANSFER command 처리 선후에 실행된다. | Transfer-Interceptor: simpleCustomTransferInterceptor |
 | Connection  | 요청측에서 Connection을 close해야 하는지 여부, 정보에 따라 closing은 자동으로 처리됨 | Response-Code: 520<br>Transfer Failed<br>Reason: agent: [192.168.12.15:8024, 192.168.12.16:8024]<br> are not responding<br>Connection: close |
@@ -296,7 +296,7 @@ Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
 
 ### URI 구성 ###
 
-경로와 파일을 지정하기 위해 Header 항목(Transfer-Source-Uri, Transfer-Destination-Uri...)에 URI를 지정합니다. URI에는 전송 선후 처리(backup, delete, interceptor 실행 등)옵션을 지정하기 위한 parameter가 포함됩니다.
+경로와 파일을 지정하기 위해 Header 항목(Transfer-Source-Uri..., Transfer-Destination-Uri...)에 URI를 지정합니다. URI에는 전송 선후 처리(backup, delete, interceptor 실행 등)옵션을 지정하기 위한 parameter가 포함됩니다.
 
 > ex) agent://192.168.219.141:8024/9063C6480000.dat?&createAck=.done&onExist=overwriteOnExist
 
@@ -317,10 +317,10 @@ Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
 URI에 포함되는 특수 문자를 인코딩하기 위해 API가 제공됩니다. 
  
 ``` java
-String uri= TransferMessageUtil.encodedUri( "192.168.42.24", 8025, "d324234.dat",
-                            OptionParameter.param( INTERCEPTOR, "simpleCustomTransferInterceptor"),
-                            OptionParameter.param( INTERCEPTOR, "simpleCustomTransferInterceptor"),
-                            OptionParameter.param( SITE, "accountMgmt"));
+String uri= TransferMessageUtil.encodedUri( ${host} ${port}, "d324234.dat",
+  OptionParameter.param( INTERCEPTOR, "simpleCustomTransferInterceptor"),
+  OptionParameter.param( INTERCEPTOR, "simpleCustomTransferInterceptor"),
+  OptionParameter.param( SITE, "accountMgmt"));
 ```
 
 - - -  
@@ -376,31 +376,14 @@ String uri= TransferMessageUtil.encodedUri( "192.168.42.24", 8025, "d324234.dat"
     public boolean requestResourceExist( Channel channel, String path, String site, long timeout) throws Exception
 
     // 4. Agent Server로부터 특정 파일을 요청하여 수신된 파일을 처리
-    //    Functional Interface를 이용하여 응답 컨텐츠에 대한 처리를 작성
+    // Functional Interface를 이용하여 응답 컨텐츠에 대한 처리를 작성
     public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, OptionParam... options
      throws Exception
     public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, long timeout, 
     OptionParam... options) throws Exception
 
-    // example
-    TransferClient client= TransferClient.create( ${host}, ${port});
-    try
-    {
-        boolean answer= client.requestGetResource( THROWAWAY, "/20201010/parallel-content.dat",  "biz1", 
-          content->{ 
-                try
-                {
-                    content.renameTo( new File( "./get.dat"));
-                    return true;
-                }
-                catch( IOException e){ return false;}
-            });
-      }
-      catch( Exception e){ logger.error( e.getMessage(), e);}
-      finally{ client.shutdown();}
-
     // 5. 특정 파일을 Agent Server에서 삭제
-    //    처리 결과로 정상적으로 삭제된 리소스목록을 가져온다.
+    // 처리 결과로 정상적으로 삭제된 리소스목록을 가져온다.
     public List<String> requestDeleteResources( Channel channel, String path, String site, OptionParam... options) throws Exception
     public List<String> requestDeleteResources( Channel channel, String path, String site, long timeout, OptionParam... options) throws Exception
             
@@ -416,45 +399,12 @@ String uri= TransferMessageUtil.encodedUri( "192.168.42.24", 8025, "d324234.dat"
     // 8. 대형 파일을 병렬로 처리하여 Agent Server에 전송
     public boolean requestPutParallelResource( File resource, String path, String site, OptionParam... options) throws Exception
     
-    // 병렬 처리로 파일을 전송할 때는 동시 처리를 위해 다음처럼 TransferClient 생성시에 적절한 worker count를 지정해주어야 합니다.
-    TransferClient client= TransferClient.create( ${host}, ${port}, 10);
-    try
-    {
-        File resource= ResourceUtils.getFile( "./src/test/resources/parallel-content.dat");
-        boolean answer= client.requestPutParallelResource( resource, "/20201010/parallel-content.dat", "biz1",
-            OptionParameter.param( ON_EXIST, OVERWRITE_ONEXIST),
-            OptionParameter.param( CREATE_ACK, ".ack"),
-            OptionParameter.param( INTERCEPTOR, "simpleCustomReceiveInterceptor"));
-    }
-    catch( Exception e){ logger.error( e.getMessage(), e);}
-    finally{ client.shutdown();} 
-
     // 9. 특정 Agent Server에 Transfer 명령을 전송하여 다른 Agent Server에 파일을 전송하도록 요청
     // sync 옵션이 true인 경우 전송 명령을 받은 Agent Server는 수신 Agetn로 전송을 완료 한 후 처리 결과를 응답합니다.
     // sync 옵션이 false인 경우 전송 명령을 받은 Agent Server는 수신 Agent로 전송을 시작한 후 처리 중인 내용을 응답합니다.
     public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, OptionParam... options) throws Exception
     public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, long timeout, OptionParam... options) throws Exception
             
-   // example
-    TransferClient client= TransferClient.create( ${host}, ${port}); 
-    try
-    {
-        List<TransferRequest> trans= new ArrayList<TransferRequest>(); 
-        trans.add( new TransferRequest()
-            .from( client)
-            .resource( "/20201010/parallel-content.large", OptionParamer.param( "biz1"))
-            .to( ${host1}, ${port})
-            .to( ${host2}, ${port}) // 수신 Agent Server가 여러 개 지정된 경우 첫번 째 Agent Server가 응답하지 않을 때 두번 째 Agent Server에 전송을 시도합니다.
-            .path( "/20201010/parallel-content.dat",
-                OptionParameter.param( INTERCEPTOR, "simpleCustomReceiveInterceptor"),
-                OptionParameter.param( CREATE_ACK, ".done"),
-                OptionParameter.param( ON_EXIST, OVERWRITE_ONEXIST)));
-        boolean answer= client.requestTransferResources( THROWAWAY, trans, true, -1,
-                    OptionParameter.param( INTERCEPTOR, "simpleCustomTransferInterceptor"));
-    }
-    catch( Exception e){ logger.error( e.getMessage(), e); }
-    finally{ client.shutdown(); }
-    
     // 10. 원격 Agent Server를 shutdown
     public boolean requestShutdownCommand( Channel channel) throws Exception
 
@@ -503,9 +453,9 @@ Agent Server에는 Server Instance별로 설정되어 모든 요청의 선후에
     <bean id="simpleCustomReceiveInterceptor" class="easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor"/>
 </beans>
 ```  
-### Chunked Message ###
+### Chunked Message 와 압축 송수신 ###
 
-과제 구현에서는 대용량 파일을 포함하여 파일이 송수신 되는 서버의 응답 시간을 개선하기 위해 데이터 송수신간에 Chunk단위 전송을 사용합니다.  
+과제 구현에서는 대용량 파일을 포함하여 파일이 송수신 되는 서버의 응답 시간을 개선하기 위해 데이터 송수신간에 Chunk단위 전송을 사용합니다.  또한 네트워크 구간의 부하를 감소시키기 위해 메시지를 압축하여 송수신합니다.
 
 ```java
 
@@ -516,6 +466,11 @@ public class TransferServerInitializer extends ChannelInitializer<SocketChannel>
     protected void initChannel( SocketChannel channel) throws Exception
     {
         ...
+        // 네트워크 구간의 부하를 감소시키기 위해 압축 송수신을 사용
+        // 빠른 응답을 위해 Chunk단위 전송
+        // 1. 압축 / 해제 : ZibDecoder, ZipEncoder
+        // 2..메시지를 해석하여 처리 가능한 타입으로 변환 : TransferMessageServerCodec
+        // 3. 해석된 메시지를 이용하여 사용자 명령을 처리 : TransferServerHandler
         pipeLine
             .addLast( ZlibCodecFactory.newZlibDecoder( ZlibWrapper.GZIP))
             .addLast( ZlibCodecFactory.newZlibEncoder( ZlibWrapper.GZIP))
@@ -531,25 +486,10 @@ public class TransferChunkedContentEncoder implements ChunkedInput<TransferConte
    @Override
     public TransferContent readChunk( ByteBufAllocator allocator) throws Exception
     {
-        if( lastChunkSent)
-            return null;
-
-        if( progress>= content.definedLength())
-        {
-            lastChunkSent= true;
-            content.release();
-            return EMPTY_LAST_CONTENT;
-        }
-
-        int bufSize= (int)Math.min( chunkSize, content.definedLength()- progress);
-        ByteBuf buffer= content.getChunk( bufSize);
-        progress+= bufSize;
-
-//        logger.debug( "readChunk current bufSize / progress: {} / {}", bufSize, progress);
-
-        return new TransferContent( buffer);
+      ...
     }
 }
+
 ```
 ### SSL 적용 ###
 
@@ -569,6 +509,8 @@ public class TransferServerConfiguration
         SslContext sslContext= null;
         if( environment.isSsl())
         {
+            // self-signed인증서를 사용하고 있다. 
+            // sign인증서를 사용해야 하는 경우 사용자 지정 인증서를 사용할 수 있도록 설정 항목을 추가하고 아래 내용을 변경한다.
             SelfSignedCertificate ssc= new SelfSignedCertificate();
             sslContext= SslContextBuilder.forServer( ssc.certificate(), ssc.privateKey()).build();
         }
@@ -576,52 +518,526 @@ public class TransferServerConfiguration
     }
 }
 
-public class TransferServerInitializer extends ChannelInitializer<SocketChannel>
-{
-    ...
-    ...
-     @Override
-    protected void initChannel( SocketChannel channel) throws Exception
-    {
-        ChannelPipeline pipeLine= channel.pipeline();
-        if( this.sslContext!= null)
-            pipeLine.addLast( this.sslContext.newHandler( channel.alloc()));
-        ,,,
-    } 
-}
-
-public class TransferClient
-{
-    private boolean bootstrap()
-    {
-        bootstrap= new Bootstrap();
-        bootstrap.group( workerGroup).channel( NioSocketChannel.class)
-            .option( ChannelOption.SO_KEEPALIVE, true)
-            .option( ChannelOption.CONNECT_TIMEOUT_MILLIS, this.connectTimeout)
-            .handler( new ChannelInitializer<Channel>(){
-                @Override
-                protected void initChannel( Channel ch) throws Exception
-                {
-                    ChannelPipeline pipeline= ch.pipeline();
-                    if( ssl)
-                        pipeline.addLast( SslContextBuilder.forClient().trustManager( 
-                                InsecureTrustManagerFactory.INSTANCE).build().newHandler( ch.alloc()));
-                    ...
-                }
-            });
-        return true;
-    }
-
-}
 ```
 ### 별도의 암복호화 처리 ###
 
-별도의 암복화처리가 필요한 경우 위애 설명된 파일 송수신 간에 실생되는 선후처리기에서 암복화 모듈을 이용하여 처리할 수 있습니다.  암복화 처리에는 일반적으로 상용 암복화 모듈이 적용됩니다. 이번 과제에서는 
+별도의 암복화처리가 필요한 경우 위애 설명된 파일 송수신 간에 실생되는 선후처리기에서 암복화 모듈을 이용하여 처리할 수 있습니다.  암복화 처리에는 일반적으로 상용 암복화 모듈이 적용됩니다. 이번 과제에서는 암복화 처리 구간에서 해당 내용이 필요함을 로깅하는 것으로 대체합니다.
 
+```java
+public class SimpleCustomTransferInterceptor implements TransferInterceptor
+{
+    ...
+    @Override
+    public boolean preTransfer( TransferContext context) throws Exception
+    {
+        logger.debug( "custom interceptoer {} preTransfer", SimpleCustomTransferInterceptor.class);
+        logger.info( "encryption processing if required");
+        // check if required
+        return true;
+    } 
+}
+
+public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
+{
+  ...
+  @Override
+    public void postReceive( TransferContext context, Exception cause) throws Exception
+    {
+        logger.debug( "custom interceptoer {} postReceive", SimpleCustomReceiveInterceptor.class);
+        logger.info( "decryption processing if required");
+        // process if required
+    }
+}
+```
 ### 대용량 파일에 대한 병렬 전송 ###
 
-### 수신 Agent Server의 복수 지정 ###
+대용량 파일의 경우  처리 성능을 향상시키기 위해 파일을 여러 부분으로 분할하여 동시 전송처리합니다.
 
-### 주요 로직에 대한 설명 ###
+대용량 파일 송신 처리 프로세스
+1. 기본 Chunked 전송 방식으로 처리하기에 충분한 크기인 경우 requestPutResource에서 처리하도록 전달
+2. 파일 사이즈와 동시 처리에 사용할 수 있는 worker thread count를 이용하여 분할 전송할 적절한 사이즈와 동시 처리  thread 수를 계산
+3. 전체 과정에 실패할 경우 분할 전송된 파일을 수신 서버에서 정리할 수 있도록 session 생성 요청 
+4. Multi Thread Executor에 의한 병렬 처리
+   1. 분할될 파일 이름을 고유한 이름으로 생성 ( suffix index)
+   2. 파일의 분할 위치에서 분할 크기만큼 읽어서 Chunk단위로 전송
+   3. 전송 요청의 완료 응답을 대기 후 완료 처리
+5. 모든 Executor Thread에서 분할 전송 처리가 완료(응답 수신)될 때까지 대기 후 Merge Comnand Request 전송
 
-### 시연 내용과 방법 ###
+```java
+    /**
+     * 수신 Agent Server에 파일을 분한하여 전송
+     * 분할 전송이 완료된 뒤에는 Merge Command를 송신하여 수신 Agent Server에서 분할 수신된 파일을 Merge되도록 한다.
+     * @param resource 전송 파일
+     * @param path 수신 위치
+     * @param site 업무 그룹
+     * @param options 옵션 파라미터 목록
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
+    public boolean requestPutParallelResource( File resource, String path, String site, OptionParameter... options)
+            throws Exception
+    {
+          ...
+        // 기본 Chunked 전송 방식으로 처리하기에 충분한 크기인 경우 기본 Put Request로 처리한다.
+        if( resource.length()< chunkSize* 10)
+            return requestPutResource( THROWAWAY, resource, path, site, options);
+        ...
+        // 파일 사이즈와 동시 처리에 사용할 수 있는 worker thread count를 이용하여
+        // 분할 전송할 적절한 사이즈와 동시 처리  thread 수를 계산
+        int concurrent= Math.max( 2, workerGroup.executorCount());
+        int parallelChunk= Math.min( MAX_PARALLEL_CHUNK, (int)( resource.length() / concurrent));
+        ExecutorService service= Executors.newFixedThreadPool( concurrent);
+        CountDownLatch latch= new CountDownLatch( (int)Math.ceil( (float)resource.length()/ parallelChunk));
+
+        // 파일에서 분할하여 읽을 수 있도록 처리
+        ChunkedNioFile chunked= new ChunkedNioFile( resource, parallelChunk);
+        ChunkedNioFileBuf reader= new ChunkedNioFileBuf( chunked);
+
+        int tasks= (int)latch.getCount();
+        ...
+        try
+        {
+            ...
+            // 전체 과정에 실패한 경우 분할 전송된 파일을 수신 서버에서 정리할 수 있도록  session 생성 요청 
+            TransferMessage session= new TransferMessage( ACTION);
+            session.setUri( SESSION_);
+            String sessionId= request( THROWAWAY, session, response->{
+                return response.headers().get( SESSION_ID);
+            });
+
+            for( int i= tasks; i> 0 ; i--)
+            {
+                service.execute( new Runnable(){
+                    @Override
+                    public void run()
+                    {
+                        ...
+                        try
+                        {
+                            ...
+                            SplittedBuf splitted= reader.nextBuf( channel.alloc());
+                            suffix= splitted.suffix;
+                            // 분할된 파일 이름을 고유한 이름으로 생성
+                            // .split%d로 지정된 suffix는 파일이 분할 순서대로 순차적으로 증가
+                            // @see easymaster.transfer.file.client.ChunkedNioFileBuf.SplittedBuf 
+                            // @see easymaster.transfer.file.util.FileUtil
+                            splitname= FileUtil.onlyPath( path)+ PATH_SEPARATOR+ UUID.randomUUID().toString().replace( '-', '_')+ suffix;
+                            buf= splitted.buf;
+                            
+                            // PUT 전송 명령 생성
+                            TransferMessage request= new TransferMessage( PUT);
+                            ...
+                            String destUri= TransferMessageUtil.encodedUri( ...);
+                            ...
+                            // 전송 명령 write
+                            // 분할된 파일을 Chunk단위로 read, write
+                            channel.writeAndFlush( request);
+                            TransferParallelContentEncoder chunk= new TransferParallelContentEncoder( buf, chunkSize);
+                            channel.writeAndFlush( chunk);
+
+                            // 전송 요청의 완료 응답을 대기
+                            TransferClientHandler handler= (TransferClientHandler)channel.pipeline().last();
+                            Future<TransferMessage> future= handler.sync();
+                            TransferMessage response= future.get();
+                            TransferResponseCode rsCode= response.headers().getResponseCode();
+
+                            // 분할된 파일 전송의 응답을 처리
+                            if( SUCCESS!= ResponseCode.valueOf( rsCode.code()))
+                            {
+                                ...
+                            }
+                            splits.add( splitname);
+                        }
+                        catch( Exception e){ causes.add( e); }
+                        finally
+                        {
+                            if( channel!= null) channel.close();
+                            latch.countDown();
+                            logger.debug( "latch countdown: {}", suffix);
+                        }
+                    }
+                });
+            }
+
+            // 모든 Executor Thread에서 분할 전송 처리(응답 수신)가 완료될 때까지 대기
+            latch.await();
+            ...
+
+            // Tasks가 모두 실행(응답 수신) 완료 되었으므로 수신 Agent Server Merge Command Request를 전송 
+            Channel channel= connect();
+            InetSocketAddress local= (InetSocketAddress)channel.localAddress();
+            try
+            {
+                TransferMessage request= new TransferMessage( ACTION);
+                request.setUri( MERGE_);
+                ...
+                return request( channel, request, response->{ return true; });
+            }
+            finally
+            {
+                if( chunked!= null) chunked.close();
+                if( channel!= null) channel.close();
+            }
+        }
+        catch( ResponseHandlerException re) { ...}
+        catch( Exception e){ ...}
+        catch( Throwable th){...}
+        finally{ ...}
+    }
+}
+```
+### 여러 파일 전송 요청에 따른 동시 처리 ###
+
+전송 명령에 하나 이상의 Agent Server로 여러 개의 파일을 전송하도록 요청된 경우 Agent Server는 이를 병렬로 동시 처리합니다.
+
+복수 파일 처리 프로세스
+1. 전송 파일에 대한 Task목록 생성
+2. TransferExecutor를 생성를 생성하여 여러 개의 Task를 처리하도록 준비하여 호출
+3. validation(sync) 옵션에 따라 비동기 처리하여 바로 응답을 전송하거나 처리 결과를 대기하여 응답 전송
+   1. 수신 Agent Server별로 전송 파일 목록을 정리
+   2. Agent Server별로 발생할 요청 수를 계산(parallelPutRequest발생 여부를 판단하여 반영)하여 TransferClient 생성
+   3. 수신 Agent Server가 목록으로 전달된 경우 응답 가능한 서버로 연결
+   4. 동시에 TaskRunner를 비동기 호출하여 생성된 TransferClient에 parallelPutRequest 요청
+   5. TaskRunner들의 처리가 모두 완료될 때까지 대기
+
+```java
+public class TransferCommandRequestHandler extends AbstractRequestHandler
+{
+  ...
+    private HandlerResponse handleTransferCommandRequest( final TransferMessage request) throws RequestHandlerException
+    {
+        ...
+        Future<TransferExecutor.Result> handler= null;
+        TransferContext transfer= null;
+        try
+        {
+            final List<TransferExecutor.Task> tasks= new LinkedList<TransferExecutor.Task>();
+            ...
+
+            // 전송 파일의 갯수 만큼 TransferExecutor.Task 생성
+            long count= sources.stream().filter( StringUtils::hasText).map( s-> {
+              ...
+                try
+                {
+                    ///
+                    TransferExecutor.Task task= new TransferExecutor.Task();
+                    task.sourceUri( s).sourcePath( path).srcOptions( srcOpts);
+                    ...
+                    task.destinationUri( dest).destinationPath( target.getPath()).destOptions( targetOpts);
+                    ...
+                    tasks.add( task);
+                    return task.sourcePath;
+                }
+                catch( Exception e) { return s;}}).count();
+
+            // 전송 파일의 요청과 수신 파일 경로가 일치하지 않는 경우 오류 처리
+            if( count!= sources.size() || count!= destinations.size() || count!= tasks.size() || tos.hasNext())
+                throw new RequestHandlerException( BAD_REQUEST, "uris( count, format) are invalid");
+
+            // Tasks목록을 병렬로 처리할 수 있도록 TransferExecutor를 생성
+            TransferExecutor trans= new TransferExecutor( tasks, environment);
+            ....
+            for( Task task: tasks)
+            {
+                ...
+                paths.add( task.sourcePath);
+            }
+            trans.prepare();
+            ...
+
+            // 전송 처리를 비동기로 처리하기 위해 별도의 Thread Executor를 사용한다. 
+            // validation option이 false인 경우 비동기로 전송 요청을 처리하고 전송 처리가 진행중임을 응답으로 전송한다.
+            // validation option이 true인 경우 비동기로 실행된 전송 요청의 처리 결과를 대기하여 전송 처리 완료 여부를 응답으로 전송한다. 
+            handler= TransferCommandExecutor.transferExecutor().submit( new Callable<TransferExecutor.Result>(){
+                @Override
+                public TransferExecutor.Result call() throws Exception
+                {
+                    return trans.transfer();
+                }});
+
+            // validation option에 따른 완료 후 응답 또는 즉시 응답
+            if( validation)
+            {
+                TransferExecutor.Result result= timeout!= -1 ? handler.get( timeout, TimeUnit.SECONDS) : handler.get();
+               ...
+            }
+            else
+                response.headers().add( REASON, sources.size()+ " files are being transferred");
+
+            ...
+            return new HandlerResponse( response, postProcess, afterCompletion);
+        }
+        catch( TimeoutException | CancellationException | InterruptedException | ExecutionException te) { ...}
+        catch( Exception e) {...}
+    }
+}
+
+public class TransferExecutor
+{
+    ...
+
+    public boolean prepare() throws Exception
+    {
+        // 파일을 전송할 수신 Agent Server별로 전송 대상을 정리한다. 
+        this.group= tasks.stream().collect( groupingBy( Task::agentAddresses, toList()));
+        logger.debug( "destination agent groups: {}", group);
+        
+        for( Map.Entry<List<String>, List<Task>> entry: group.entrySet())
+        {
+            ...
+            // 수신 Agent 서버에 파일이 이미 존재하고 FailOnExist Option인 경우 fast-fail 처리한다.
+            for( Task task: tasks)
+            {
+                if( OptionParameter.contains( task.destOptions, ON_EXIST, FAIL_ONEXIST, true)
+                        && client.requestResourceExist( THROWAWAY, task.destinationPath, OptionParameter.first( task.destOptions, SITE)))
+                    throw new RequestHandlerException( ALREADY_EXIST, "target file["+ task.destinationPath+ "] is already exist");
+            }
+        }
+        return true;
+    }
+    
+    public Result transfer() throws Exception
+    {
+        Result result= new Result();
+        ExecutorService executor= null;
+        try
+        {
+            // Agent Server별로 접속하여 서버별 전송 파일을 전송한다.
+            for( Map.Entry<List<String>, List<Task>> entry: group.entrySet())
+            {
+                ...
+                // 하나의 AgentServer에 전달할 worker count를 계산한다. 
+                // 대용량 파일이 포함된 경우 최적화하여 계산되고 전체적으로 max size를 초과할 수 없다. 
+                int workers= Math.min( MAX_WORKERS, optimizedWorkers( tasks));
+
+                // 수신 Agent Server에 연결을 시도한다. 목록으로 전달된 경우 다음 연결을 시도한다.
+                final TransferClient client= tryConnect( agents, workers);
+                if( client== null)
+                {
+                    tasks.forEach( t->{
+                        result.failed.getAndIncrement();
+                        result.reasons.add( "resource ["+ t.sourceUri+ "] transfering is failed. cause: agent is not responding");
+                    });
+                    continue;
+                }
+
+                // ThreadPool을 생성하여 작업을 요청한다.
+                // TaskRunner에서는 전달된 Client에 putParallelRequest를 호출한다.
+                executor= Executors.newFixedThreadPool( workers);
+                CountDownLatch latch= new CountDownLatch( tasks.size());
+                try
+                {
+                    for( Task task: tasks)
+                        executor.submit( new TaskRunner( client, task, latch, result));
+                    // 전체 처리가 완료될 때 까지 대기한다.
+                    latch.await();
+                }
+                finally { ...}
+            }
+            return result;
+        }
+        finally { ...}
+    }
+
+    // TransferClient에 전달할 worker count를 계산한다.
+    // 기본적으로 파일 수 만큼 증가한다. 
+    // 전송할 파일 중 대용량 파일에 대해서는 ParallelTransfer요청이 발생하므로 하나의 Thread를 더 사용하도록 한다.
+    private int optimizedWorkers( List<Task> tasks)
+    {
+        return tasks.stream()
+                .map( task-> { return new File( task.sourcePath);})
+                .mapToInt( f->{
+                    ...
+                    return workers;
+                }).sum();
+    }
+    ...
+
+    class TaskRunner implements Runnable
+    {
+        ...
+        
+        @Override
+        public void run()
+        {
+            ..
+            try
+            {
+                ..
+                File resource= new File( task.sourcePath);
+                // 대용량 파일인 경우 판단하여 처리할 수 있도록 requestPutParallelResource를 호출한다. 
+                ret= client.requestPutParallelResource( resource, task.destinationPath, site,
+                        params.toArray( new OptionParameter[params.size()]));
+
+                ...
+            }
+            catch( Exception e){ ...}
+            finally{ ...}
+        }
+    }
+  ...
+}  
+
+```
+
+### 메시지 처리를 위한 Codec과 Encoder, Decoder ###
+
+이번 과제는 Netty Framework를 이용하여 구현되었으며 메시지 프로토콜을 정의하였습니다.  메시지는 URI를 포함하는 COMMAND 영역과 HEADER영역,  CONTENT영역으로 구분되며 Chunk단위로 전송됩니다. 이를 처리하기 위한 다음 `TransferMessageServerCodec`과 `TransferMessageEncoder`, `TransferMessageDecoder`를 작성하였습니다. 통신 구간의 주요 로직을 설명하기 위해 아래 내용을 추가합니다.
+
+```java
+public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<TransferMessageDecoder, TransferMessageEncoder>
+{
+    ...
+    private final class Encoder extends TransferMessageEncoder
+    {
+        @Override
+        public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
+        {
+            if( msg instanceof TransferMessage)
+            {
+                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신한다. 
+                ...
+            }
+            
+            // 전송 데이터를 메시지로 변환한다.
+            super.encode( ctx, msg, out);
+            if( failOnMissinResponse && msg instanceof TransferMessage)
+                requestResponseCounter.decrementAndGet();
+        }
+    }
+    
+    private final class Decoder extends TransferMessageDecoder
+    {
+        @Override
+        public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
+        {
+            int before= out.size();
+            // 전달된 메시지를 해석한다.
+            super.decode( ctx, in, out);
+            ...
+        }
+        ...
+    }
+}
+
+public class TransferMessageDecoder extends ByteToMessageDecoder
+{
+    ...
+    @Override
+    public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
+    {
+        switch( currentState)
+        {
+            case BAD_MESSAGE:
+                ...
+                break;
+            case SKIP_CONTROL_CHARS:
+                // ASCII Control Character가 전송된 경우 skip한다.
+            case READ_INITIAL:
+                // 처음 발생하는 HEADER LINE을 해석한다.
+            case READ_HEADER:
+                // HEADER 내용을 해석한다.
+            case READ_FIXED_LENGTH_CONTENT:
+                // 고정 길이로 전달된 메시지를 해석한다.
+            case READ_CHUNK_SIZE:
+                // CHUNK SIZE가 발생한 경우 처리한다.
+            case READ_CHUNKED_CONTENT:
+                // CHUNKED CONTENT를 변환한다.
+            case READ_CHUNKED_DELIMITER:
+                // CHUNK DELIMITER를 처리한다.
+        }
+    }
+}
+
+public class TransferMessageEncoder extends MessageToMessageEncoder<TransferObject>
+{
+    ...
+    @Override
+    public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
+    {
+      // HEADER 구간의 메시지를 변환한다.
+        if( msg instanceof TransferMessage)
+        {
+          ...
+        }
+
+        //..CONTENT 구간의 내용을 Chunk단위로 전송할 수 있도록 변환한다.
+        if( msg instanceof TransferContent)
+        {
+            ...
+        }
+    }
+
+
+...
+}
+
+public class TransferServerHandler extends SimpleChannelInboundHandler<TransferObject>
+{
+    ...
+    
+    @Override
+    public void channelRead0( ChannelHandlerContext context, TransferObject message) throws Exception
+    {
+        // chunk단위로 수신되는 메시지를 모두 수신 또는 단일 프레임으로 전송된 요청 메시지 수산 완료
+        if( message instanceof LastTransferContent)
+        {
+            ...
+            // Agent 선처리기 호출
+            if( !preProcesses( context))
+                return;
+            
+            switch( request.command().name())
+            {
+                case ACTION_:
+                    // ACTION command 처리
+                    ActionCommandRequestHandler actHandler= new ActionCommandRequestHandler( context, applicationContext, environment);
+                    actHandler.handleCommand( request);
+                    break;
+                case INFO_:
+                    // INFO command 처리
+                    InfoCommandRequestHandler infHandle= new InfoCommandRequestHandler( context, applicationContext, environment);
+                    infHandle.handleCommand( request);
+                    break;
+                case PUT_:
+                case DELETE_:
+                case GET_:
+                case LIST_:
+                    // RESOURCE command {PUT | DELETE | GET | LIST} 처리
+                    ResourceCommandRequestHandler rsHandler= new ResourceCommandRequestHandler( context, applicationContext, environment);
+                    rsHandler.handleCommand( request);
+                    break;
+                case TRANSFER_:
+                    // TRANSFER command {PUT | DELETE | GET | LIST} 처리
+                    TransferCommandRequestHandler trHandler= new TransferCommandRequestHandler( context, applicationContext, environment);
+                    trHandler.handleCommand( request);
+                    break;
+            }
+            /// Agent 후처리기 호출
+            if( !postProcesses( context))
+                return;
+
+                // Agent 완료처리기 호출
+            if( !afterCompletions( context))
+                return;
+
+            if( closeRequired( request.headers()))
+                context.writeAndFlush( EMPTY_BUFFER).addListener( CLOSE);
+            return;
+        }
+        
+        if( message instanceof TransferMessage) // 프레임의 헤더 부분 read
+            request= (TransferMessage)message;
+        else if( message instanceof TransferContent)    // 프레임의 파일 컨텐트 부분 read
+        {
+            ...
+        }
+    }
+}    
+
+```
+
+## 시연 내용과 방법 ##
+
+시연을 위해서는 두 개의 Agent Server 인스턴스와 하나의 클라이언트가 필요합니다. 이번 과제 시연에서는 별도의 설치 과정을 생략하기 위해 ${project.basedir}/demo 위치에 `fserver-`, `fserver-2`, `transfer-client`를 미리 구성하였습니다.
+

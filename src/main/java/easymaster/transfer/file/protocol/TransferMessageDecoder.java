@@ -63,6 +63,7 @@ public class TransferMessageDecoder extends ByteToMessageDecoder
                 in.skipBytes( in.readableBytes());
                 break;
             case SKIP_CONTROL_CHARS:
+                // ASCII Control Character가 전송된 경우 skip한다.
                 if( !skipControlCharacters( in))
                     break;
                 currentState= State.READ_INITIAL;

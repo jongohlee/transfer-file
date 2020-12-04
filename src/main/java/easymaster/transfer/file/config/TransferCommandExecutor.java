@@ -9,6 +9,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
+ * 파일 전송을 비동기로 처리하기 위한 Executor
+ *  
  * @author Jongoh Lee
  *
  */

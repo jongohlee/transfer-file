@@ -77,13 +77,7 @@ public class TransferServerHandler extends SimpleChannelInboundHandler<TransferO
     @Override
     public void channelRead0( ChannelHandlerContext context, TransferObject message) throws Exception
     {
-//      if( logger.isDebugEnabled())
-//      {
-//          DecoderResult decoderResult= message.decoderResult();
-//          logger.debug( "decoderResult: [{}].", decoderResult.isSuccess());
-//          logger.debug( "readed message {}", message.getClass());
-//      }
-        
+        // chunk단위로 수신되는 메시지를 모두 수신 또는 단일 프레임으로 전송된 요청 메시지 수산 완료
         if( message instanceof LastTransferContent)
         {
             logger.debug( "LastTransferContent detected...");
@@ -132,13 +126,9 @@ public class TransferServerHandler extends SimpleChannelInboundHandler<TransferO
             return;
         }
         
-        if( message instanceof TransferMessage)
-        {
+        if( message instanceof TransferMessage) // 프레임의 헤더 부분 read
             request= (TransferMessage)message;
-//          logger.debug( "command: [{}], uri: [{}]", request.command(), request.uri());
-//          logger.debug( "request headers: [{}]", request.headers());
-        }
-        else if( message instanceof TransferContent)
+        else if( message instanceof TransferContent)    // 프레임의 파일 컨텐트 부분 read
         {
             if( request== null)
                 throw new RequestHandlerException( BAD_REQUEST, "request message not found before AgentContent");

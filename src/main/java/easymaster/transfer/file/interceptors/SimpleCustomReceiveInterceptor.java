@@ -29,6 +29,7 @@ public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
     public void postReceive( TransferContext context, Exception cause) throws Exception
     {
         logger.debug( "custom interceptoer {} postReceive", SimpleCustomReceiveInterceptor.class);
+        logger.info( "decryption processing if required");
         // process if required
     }
 

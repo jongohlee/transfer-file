@@ -92,6 +92,8 @@ public class TransferServerConfiguration
         SslContext sslContext= null;
         if( environment.isSsl())
         {
+            // self-signed인증서를 사용하고 있다. 
+            // sign인증서를 사용해야 하는 경우 사용자 지정 인증서를 사용할 수 있도록 설정 항목을 추가하고 아래 내용을 변경한다.
             SelfSignedCertificate ssc= new SelfSignedCertificate();
             sslContext= SslContextBuilder.forServer( ssc.certificate(), ssc.privateKey()).build();
         }

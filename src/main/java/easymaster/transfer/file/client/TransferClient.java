@@ -502,12 +502,23 @@ public class TransferClient
         }
     }
 
+    /**
+     * 수신 Agent Server에 파일을 분한하여 전송
+     * 분할 전송이 완료된 뒤에는 Merge Command를 송신하여 수신 Agent Server에서 분할 수신된 파일을 Merge되도록 한다.
+     * @param resource 전송 파일
+     * @param path 수신 위치
+     * @param site 업무 그룹
+     * @param options 옵션 파라미터 목록
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
     public boolean requestPutParallelResource( File resource, String path, String site, OptionParameter... options)
             throws Exception
     {
         if( !resource.exists() || resource.isDirectory())
             throw new RequestHandlerException( SOURCE_FILE_NOT_FOUND, resource.getAbsolutePath());
 
+        // 기본 Chunked 전송 방식으로 처리하기에 충분한 크기인 경우 기본 Put Request로 처리한다.
         if( resource.length()< chunkSize* 10)
             return requestPutResource( THROWAWAY, resource, path, site, options);
 
@@ -516,11 +527,13 @@ public class TransferClient
             opts.add( OptionParameter.param( SITE, site));
         CollectionUtils.mergeArrayIntoCollection( options, opts);
 
+        // 파일 사이즈와 동시 처리에 사용할 수 있는 worker thread count를 이용하여 분할 전송할 적절한 사이즈와 동시 처리  thread 수를 계산
         int concurrent= Math.max( 2, workerGroup.executorCount());
         int parallelChunk= Math.min( MAX_PARALLEL_CHUNK, (int)( resource.length() / concurrent));
         
         ExecutorService service= Executors.newFixedThreadPool( concurrent);
         CountDownLatch latch= new CountDownLatch( (int)Math.ceil( (float)resource.length()/ parallelChunk));
+        // 파일에서 분할하여 읽을 수 있도록 처리
         ChunkedNioFile chunked= new ChunkedNioFile( resource, parallelChunk);
         ChunkedNioFileBuf reader= new ChunkedNioFileBuf( chunked);
 
@@ -537,6 +550,7 @@ public class TransferClient
                     && requestResourceExist( THROWAWAY, path, site))
                 throw new RequestHandlerException( ALREADY_EXIST, "target file["+ path+ "] is already exist");
             
+            // 전체 과정에 실패한 경우 분할 전송된 파일을 수신 서버에서 정리할 수 있도록 timeout을 관리하는 session 생성 요청 
             TransferMessage session= new TransferMessage( ACTION);
             session.setUri( SESSION_);
             String sessionId= request( THROWAWAY, session, response->{
@@ -560,11 +574,17 @@ public class TransferClient
                             InetSocketAddress local= (InetSocketAddress)channel.localAddress();
                             SplittedBuf splitted= reader.nextBuf( channel.alloc());
                             suffix= splitted.suffix;
-                            splitname= FileUtil.onlyPath( path)+ PATH_SEPARATOR+ UUID.randomUUID().toString().replace( '-', '_')+ suffix;
+                            // 분할된 파일 이름을 고유한 이름으로 생성
+                            // .split%d로 지정된 suffix는 파일이 분할 순서대로 순차적으로 증가
+                            // @see easymaster.transfer.file.client.ChunkedNioFileBuf.SplittedBuf 
+                            // @see easymaster.transfer.file.util.FileUtil
+                            splitname= FileUtil.onlyPath( path)
+                                    + PATH_SEPARATOR+ UUID.randomUUID().toString().replace( '-', '_')+ suffix;
                             buf= splitted.buf;
 
                             logger.debug( "parallel chunk- readable: {}, progress: {}", buf.readableBytes(), chunked.progress());
                             
+                            // PUT 전송 명령 생성
                             TransferMessage request= new TransferMessage( PUT);
                             String srcUri= TransferMessageUtil.encodedUri( local.getAddress().getHostAddress(), local.getPort(),
                                     FileUtil.stripPath( resource.getAbsolutePath()), new OptionParameter[] {});
@@ -585,10 +605,13 @@ public class TransferClient
                                 .add( TRANSFER_DESTINATION_URI, destUri)
                                 .add( TRANSFER_ENCODING, CHUNKED);
 
+                            // 전송 명령 write
+                            // 분할된 파일을 Chunk단위로 read, write
                             channel.writeAndFlush( request);
                             TransferParallelContentEncoder chunk= new TransferParallelContentEncoder( buf, chunkSize);
                             channel.writeAndFlush( chunk);
 
+                            // 전송 요청의 완료 응답을 대기
                             TransferClientHandler handler= (TransferClientHandler)channel.pipeline().last();
                             logger.debug( "sync for future response");
                             Future<TransferMessage> future= handler.sync();
@@ -596,6 +619,7 @@ public class TransferClient
                             logger.debug( "awaked for future response");
                             TransferResponseCode rsCode= response.headers().getResponseCode();
 
+                            // 분할된 파일 전송의 응답을 처리
                             if( SUCCESS!= ResponseCode.valueOf( rsCode.code()))
                             {
                                 StringBuilder sb= new StringBuilder();
@@ -626,6 +650,7 @@ public class TransferClient
                 });
             }
 
+            // 모든 Executor Thread에서 분할 전송 처리(응답 수신)가 완료될 때까지 대기
             latch.await();
 
             logger.debug( "--------------------------------------------");
@@ -635,6 +660,7 @@ public class TransferClient
             if( !causes.isEmpty())
                 throw causes.get( 0);
 
+            // Tasks가 모두 실행(응답 수신) 완료 되었으므로 수신 Agent Server Merge Command Request를 전송 
             Channel channel= connect();
             InetSocketAddress local= (InetSocketAddress)channel.localAddress();
             try

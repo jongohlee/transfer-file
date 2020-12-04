@@ -146,7 +146,6 @@ public class TransferMessageEncoder extends MessageToMessageEncoder<TransferObje
         if( contentLength> 0)
         {
             String lengthHex= Long.toHexString( contentLength);
-//            ByteBuf buf= ctx.alloc().buffer( lengthHex.length()+ 2);
             ByteBuf buf= Unpooled.buffer( lengthHex.length()+ 2);
             buf.writeCharSequence( lengthHex, CharsetUtil.US_ASCII);
             ByteBufUtil.writeShortBE( buf, CRLF_SHORT);

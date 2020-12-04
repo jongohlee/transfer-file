@@ -71,6 +71,7 @@ public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<Tra
         {
             if( msg instanceof TransferMessage)
             {
+                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신한다. 
                 TransferMessage message= (TransferMessage)msg;
                 long contentLength= TransferMessageUtil.getContentLength( message, -1);
                 if( contentLength< 0)
@@ -91,7 +92,7 @@ public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<Tra
                 message.headers().add( TransferHeaderNames.AGENT_TYPE, TransferHeaderValues.AGENT);
             }
             
-            
+            // 전송 데이터를 메시지로 변환한다.
             super.encode( ctx, msg, out);
             if( failOnMissinResponse && msg instanceof TransferMessage)
                 requestResponseCounter.decrementAndGet();
@@ -104,6 +105,7 @@ public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<Tra
         public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
         {
             int before= out.size();
+            // 전달된 메시지를 해석한다.
             super.decode( ctx, in, out);
             if( failOnMissinResponse)
             {

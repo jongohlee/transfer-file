@@ -21,6 +21,7 @@ public class SimpleCustomTransferInterceptor implements TransferInterceptor
     public boolean preTransfer( TransferContext context) throws Exception
     {
         logger.debug( "custom interceptoer {} preTransfer", SimpleCustomTransferInterceptor.class);
+        logger.info( "encryption processing if required");
         // check if required
         return true;
     }

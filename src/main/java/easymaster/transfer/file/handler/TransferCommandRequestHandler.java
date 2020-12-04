@@ -117,6 +117,7 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
             Iterator<String> dests= destinations.iterator();
             Iterator<String> tos= toAgents.iterator();
 
+            // 전송 파일의 갯수 만큼 TransferExecutor.Task 생성
             long count= sources.stream().filter( StringUtils::hasText).map( s-> {
                 Map<String, List<String>> srcOpts= new LinkedHashMap<String, List<String>>();
                 Map<String, List<String>> targetOpts= new LinkedHashMap<String, List<String>>();
@@ -158,11 +159,13 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
                 logger.debug( "filtered: {}, sourceUris: {}, destinationUris: {}, toAgents: {}, toIterators: {}",
                         new Object[] { count, sources.size(), destinations.size(), toAgents.size(), tos.hasNext()});
 
+            // 전송 파일의 요청과 수신 파일 경로가 일치하지 않는 경우 오류 처리
             if( count!= sources.size() || count!= destinations.size() || count!= tasks.size() || tos.hasNext())
                 throw new RequestHandlerException( BAD_REQUEST, "uris( count, format) are invalid");
 
             logger.debug( "excutable tasks: {}", tasks);
 
+            // Tasks목록을 병렬로 처리할 수 있도록 TransferExecutor를 생성
             TransferExecutor trans= new TransferExecutor( tasks, environment);
             List<String> paths= new LinkedList<String>();
             for( Task task: tasks)
@@ -177,11 +180,15 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
             }
             trans.prepare();
 
+            // 선후처리기에서 사용할 주요 정보를 담고 있는 TransferContext 생성
             transfer= TransferContext.createTransferContext( applicationContext, request.headers(), 
                     paths.toArray( new String[paths.size()]));
 
             preProcess( transfer, request.headers().getAll( TRANSFER_INTERCEPTOR), request.headers(), null, TransferInterceptor.class);
 
+            // 전송 처리를 비동기로 처리하기 위해 별도의 Thread Executor를 사용한다. 
+            // validation option이 false인 경우 비동기로 전송 요청을 처리하고 전송 처리가 진행중임을 응답으로 전송한다.
+            // validation option이 true인 경우 비동기로 실행된 전송 요청의 처리 결과를 대기하여 전송 처리 완료 여부를 응답으로 전송한다. 
             handler= TransferCommandExecutor.transferExecutor().submit( new Callable<TransferExecutor.Result>(){
                 @Override
                 public TransferExecutor.Result call() throws Exception
@@ -189,6 +196,7 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
                     return trans.transfer();
                 }});
 
+            // validation option에 따른 완료 후 응답 또는 즉시 응답
             if( validation)
             {
                 TransferExecutor.Result result= timeout!= -1 ? handler.get( timeout, TimeUnit.SECONDS) : handler.get();

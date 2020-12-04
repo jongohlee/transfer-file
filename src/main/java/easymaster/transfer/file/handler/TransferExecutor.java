@@ -46,6 +46,9 @@ import easymaster.transfer.file.util.TransferMessageUtil;
 import io.netty.channel.Channel;
 
 /**
+ * 파일 전송을 처리하는 Executor
+ * 수신 서버가 목록으로 전달된 경우 순차적으로 연결을 시도하여 전송 가능한 Agent Server에 전송한다.
+ * 전송 Task가 목록으로 전달된 경우 ThreadPool을 생성하여 병렬로 파일을 전송을 처리한다.
  * @author Jongoh Lee
  *
  */
@@ -68,6 +71,7 @@ public class TransferExecutor
 
     public boolean prepare() throws Exception
     {
+        // 파일을 전송할 수신 Agent Server별로 전송 대상을 정리한다. 
         this.group= tasks.stream().collect( groupingBy( Task::agentAddresses, toList()));
         logger.debug( "destination agent groups: {}", group);
         
@@ -79,6 +83,7 @@ public class TransferExecutor
             if( client== null)
                 throw new RequestHandlerException( TRANSFER_FAILED, "agent: "+ agents+ " are not responding");
             
+            // 수신 Agent 서버에 파일이 이미 존재하고 FailOnExist Option인 경우 fast-fail 처리한다.
             for( Task task: tasks)
             {
                 if( OptionParameter.contains( task.destOptions, ON_EXIST, FAIL_ONEXIST, true)
@@ -95,13 +100,18 @@ public class TransferExecutor
         ExecutorService executor= null;
         try
         {
+            // Agent Server별로 접속하여 서버별 전송 파일을 전송한다.
             for( Map.Entry<List<String>, List<Task>> entry: group.entrySet())
             {
                 List<String> agents= entry.getKey();
                 List<Task> tasks= entry.getValue();
+                
+                // 하나의 AgentServer에 전달할 worker count를 계산한다. 
+                // 대용량 파일이 포함된 경우 최적화하여 계산되고 전체적으로 max size를 초과할 수 없다. 
                 int workers= Math.min( MAX_WORKERS, optimizedWorkers( tasks));
                 logger.debug( "optimized worker count: {}", workers);
 
+                // 수신 Agent Server에 연결을 시도한다. 목록으로 전달된 경우 다음 연결을 시도한다.
                 final TransferClient client= tryConnect( agents, workers);
                 if( client== null)
                 {
@@ -112,6 +122,8 @@ public class TransferExecutor
                     continue;
                 }
 
+                // ThreadPool을 생성하여 작업을 요청한다.
+                // TaskRunner에서는 전달된 Client에 putParallelRequest를 호출한다.
                 executor= Executors.newFixedThreadPool( workers);
                 CountDownLatch latch= new CountDownLatch( tasks.size());
                 try
@@ -119,6 +131,7 @@ public class TransferExecutor
                     for( Task task: tasks)
                         executor.submit( new TaskRunner( client, task, latch, result));
 
+                    // 전체 처리가 완료될 때 까지 대기한다.
                     latch.await();
                 }
                 finally
@@ -137,6 +150,9 @@ public class TransferExecutor
         }
     }
 
+    // TransferClient에 전달할 worker count를 계산한다.
+    // 기본적으로 파일 수 만큼 증가한다. 
+    // 전송할 파일 중 대용량 파일에 대해서는 ParallelTransfer요청이 발생하므로 하나의 Thread를 더 사용하도록 한다.
     private int optimizedWorkers( List<Task> tasks)
     {
         return tasks.stream()
@@ -216,6 +232,7 @@ public class TransferExecutor
                 });
 
                 File resource= new File( task.sourcePath);
+                // 대용량 파일인 경우 판단하여 처리할 수 있도록 requestPutParallelResource를 호출한다. 
                 ret= client.requestPutParallelResource( resource, task.destinationPath, site,
                         params.toArray( new OptionParameter[params.size()]));
 
@@ -367,7 +384,5 @@ public class TransferExecutor
 
         Queue<String> reasons= new ConcurrentLinkedQueue<String>();
     }
-
-
 
 }
