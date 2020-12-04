@@ -29,7 +29,7 @@ goto end
 
 set SESSIONNAME=Console
 @REM  프로세스 제어를 위해 INSTANCE ID를 생성
-set INSTANCE=%DATE:~0,4%%DATE:~5,2%%DATE:~8,2%%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%%TIME:~9,2%%RANDOM%
+set INSTANCE=%DATE:~0,2%%DATE:~3,2%%DATE:~8,2%%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%%TIME:~9,2%%RANDOM%
 echo Instance: %INSTANCE%
 set JAVA_OPTS=%JAVA_OPTS% -DWCID=%INSTANCE%
 
@@ -44,8 +44,9 @@ SET /A CUR_PID=%%T) &GOTO SkipLine
 
 echo PID: %CUR_PID%   
 
+if not exist "logs" mkdir logs
 if exist %PID_FS% del /Q %PID_FS%
-echo %CUR_PID% >> %PID_FS%
+echo %INSTANCE%>> %PID_FS%
 
 goto end
 
@@ -57,7 +58,7 @@ if not exist %PID_FS% (
         goto error
     )
 
-set /p PS=< %PID_FS%
+set /p INSTANCE=< %PID_FS%
 del /Q %PID_FS%
 Wmic process where "Name="java.exe" and CommandLine Like '%%%INSTANCE%%%'" delete
 rem Taskkill /PID %PS% /F

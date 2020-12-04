@@ -57,12 +57,12 @@ Transfer File Agent는 EAI, FEP,  Batch 등 단위시스템에  설치되어 서
  - agent-boot.bat : Windows System 환경에서 command line으로 Agent Server를 실행하기 위한 배치 파일
  - transfer-file.service.exe : Windows System에 Agent Server를 서비스로 등록하기 위한 실행 파일(transfer-file.NET4.exe파일과 동일)
  - transfer-file.service.xml : Windows System에 Agent Server를 서비스로 등록하기 위한 설정 파일
- - transfer-file.NET2.exe : .NET2만을 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `bxi-file-agent.service.exe`로 이름을 변경하여 사용
- - transfer-file.NET4.exe : .NET4를 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `bxi-file-agent.service.exe`로 이름을 변경하여 사용
+ - transfer-file.NET2.exe : .NET2만을 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `transfer-file.service.exe`로 이름을 변경하여 사용
+ - transfer-file.NET4.exe : .NET4를 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `transfer-file.service.exe`로 이름을 변경하여 사용
 
 ### Step 2 ###
 
-./config/tranfer-file.yml파일을 수정하여 Agent Server 실행을 위해 필요한 설정 항목을 수정한다. 대부분의 경우 미리 작성되어 있는 내용을 그대로 적용합니다.
+./config/tranfer-file.yml파일을 수정하여 Agent Server 실행을 위해 필요한 설정 항목을 수정합니다. 대부분의 경우 미리 작성되어 있는 내용을 그대로 적용합니다.
 
 ```yaml
 spring:
@@ -89,14 +89,15 @@ management:
       enabled: true
         
 transfer:
-   # 다른 Ageng로 연결할 때의 connection timeout
+   # 다른 Ageng Server로 연결할 때의 connection timeout
   connect-timeout: 5s
   # 대용량 파일 전송시에는 성능을 위해 파일을 분할하여 전송
   # 분할 전송이 완료된 후 merge request를 전달하여 분할 전송된 파일을 병합
   # 이 과정을 하나의 세션으로  처리하고 있으며 전체 과정 중 오류 및 지연이 발생하는 경우 
   # Session timeout을 두어 분할 전송된 파일들을 일괄 제거하고 전송 실패로 처리
   session-timeout: 30M
-  # default 120 min, 요청별로 timeout seconds를 지정할 수 있으나 이를 지정하지 않은 경우 아래에 지정된 최대 허용 시간으로 사용한다.
+  # default 120 min, 요청별로 timeout seconds를 지정할 수 있으나 
+  # 이를 지정하지 않은 경우 아래에 지정된 최대 허용 시간으로 사용한다.
   transfer-timeout: 120M
   # ssl 적용 여부를 지정
   ssl: on
@@ -109,15 +110,17 @@ transfer:
   #하나의 파일 전송 메시지는 chunk단위로 나뉘어 전송
   # 아래에 chunk size를 지정
   chunk-size: 1048576 # 1M
-  # Agent 실행 시 파일 저장소 위치를  확인하고 디렉토리를 생성
+  # Agent Server 실행 시 파일 저장소 위치를  확인하고 디렉토리를 생성
   # 파일 시스템 오류가 발생하는 경우 중단할 지 여부를 결정
   validation: on
 
   ##################################################################################
   #  repository 영역에는 다음 항목을 지정합니다.
   #    1. base-dir: 전송할 파일 위치와  수신된 파일을 저장하기 위한 기본 경로
-  #    2. backup-dir: 파일 전송후 백업이 요청파라미터에 포함되었으나 백업 위치를 따로 지정하지 않은 경우 사용될 기본 백업 경로
-  #  repository하위의 sites 설정에는 업무별로 기본 경로를 분리하여 Agent server를 운영해야 할 경우  경로 집합을 site별로 지정
+  #    2. backup-dir: 파일 전송후 백업이 요청파라미터에 포함되었으나 
+  #                           백업 위치를 따로 지정하지 않은 경우 사용될 기본 백업 경로
+  #  repository하위의 sites 설정에는 업무별로 기본 경로를 분리하여
+  #  Agent server를 운영해야 할 경우  경로 집합을 site별로 지정
   ##################################################################################
   repository:
     base-dir: ./repositories
@@ -156,10 +159,11 @@ Window System에서는 다음 Command Line 도구 또는 System Service로 등�
 ``` bash
 agent-boot.bat status
 ```
- * 실행 중인 Agent Server는 다음 Command를 이용하여 중지할 수 있습니다.
+- 실행 중인 Agent Server는 다음 Command를 이용하여 중지할 수 있습니다.
 ``` bash
 agent-boot.bat stop
 ```
+
 #### Windows System Service를 이용한 Agent Server  실행과 제어 ####
 
 배포된 패키지는 Windows System Service로 Agent Server를 등록하여 운영할 수 있도록 시스템 서비스 등록과 테스트, 등록 해제에 사용되는 아래 파일들이 포함되어 있습니다.
@@ -172,7 +176,7 @@ agent-boot.bat stop
 1. 시스템 서비스로 Agent Server 등록
 
 ```
-transfer=file.service.exe install
+transfer-file.service.exe install
 ```
 목표 시스템이 .NET4를 지원하지 않는 경우 포함되어 있는 `transfer-file.NET2.exe`파일을 이용합니다.  `transfer-file.NET2.exe` 파일의 이름을 `transfer-file.service.exe`로 변경한 후 등록 명력을 실행합니다.   
 
@@ -180,7 +184,7 @@ transfer=file.service.exe install
  
   서비스 등록이 정상적으로 완료되면 `제어판->관리 도구->서비스`에서 정상 등록 여부룰 확인할 수 있으며 실행/중지 제어가 가능합니다.  서비스 등록을 위한 설정 파일 `transfer-file.service.xml`에 `startMode`가 `Automatic`으로 기본 설정되어 있고 `<delayedAutoStart/>`항목이  지정되어 있으므로 `transfer-file` Service는 Window System 시작과 함께 `지연시작` 됩니다.  `startMode`는 Boot, System, Automatic, Manual로 변경 지정될 수 있습니다.. 
 
-  3. 시스템 서비스 제거
+3. 시스템 서비스 제거
 
 다음 작업을 통해 등록되어 있는 Transfer-file 서비스를 제거할 수 있습니다.
 
@@ -203,10 +207,11 @@ ransfer-file.service.exe uninstall
 ``` bash
 agent-boot.sh status
 ```
- * 실행 중인 Agent Server는 다음 Command를 이용하여 중지할 수 있습니다.
+- 실행 중인 Agent Server는 다음 Command를 이용하여 중지할 수 있습니다.
 ``` bash
 agent-boot.sh stop
 ```
+
 ####  init.d Service를 이용한 Agent Server  실행과 제어 ####
 
 배포된 패키지의 `transfer-file.jar` 파일은 fully executable jar 형태로 빌드되어 있으므로 symbolic link를 생성하여 System Service로 등록되고 실행될 수 있습니다.
@@ -232,9 +237,10 @@ Transfer Agent `(Server)`는 다양한 실행 환경을 제공함에 따라 JVM�
 - Windows System Service: 전달 변수 in transfer-file.service.xml, 서비스 재등록 필요
 - Linux Command Line: JAVA_OPTS 변수 in transfer-file.bat  
 - Linux System Service: JAVA_OPTS 변수 in transfer-file.conf, 서비스 재등록 필요
+
 ### 로깅 ###
 
-설치된 Agent Server가 실행되면 설치 위치의 하위에 `logs` 디렉토리가 생성되고 `transfer-file.log` 로그 파일과 프로세스 제어를 위해 필요한 `.lock`, `.pid`파일이 생성됩니다.  생성되는 로그 파일의 위치와 로깅 레벨은 `config/transfer--ile.yml`파일을 수정하여  변경할 수 있습니다. 
+설치된 Agent Server가 실행되면 설치 위치의 하위에 `logs` 디렉토리가 생성되고 `transfer-file.log` 로그 파일과 프로세스 제어를 위해 필요한 `.lock`, `.pid`파일이 생성됩니다.  생성되는 로그 파일의 위치와 로깅 레벨은 `config/transfer-ile.yml`파일을 수정하여  변경할 수 있습니다. 
 
 **과제 시연을 위한 벙법은 문서의 마지막에 설명합니다.**
 
@@ -242,7 +248,7 @@ Transfer Agent `(Server)`는 다양한 실행 환경을 제공함에 따라 JVM�
 
 ## Transfer File Agent의 기술적인 세부 내용 ##
 
-Transfer File Agent에서는 클라이언트와 서버 또는 서버간 통신을 위해 HTTP와 유사한 별도의 프로토콜을 정의하였습니다. Agent 서버 사용시 기본적으로 제공되는 Java Client library를 사용하게 되므로 아래의 프로토콜에 대한 세부 사항을 이해할 필요는 없습니다. 그러나  메시지 프로토콜을 명시적으로 설계함으로써  이기종 언어로 Agent Server Cient를 작성할 수 있도록 확장성을 보장하였습니다.
+Transfer File Agent에서는 클라이언트와 서버 또는 서버간 통신을 위해 HTTP와 유사한 별도의 프로토콜을 정의하였습니다. Agent 서버 사용시 기본적으로 제공되는 Java Client library를 사용하게 되므로 아래의 프로토콜에 대한 세부 사항을 이해할 필요는 없습니다. 그러나  메시지 프로토콜을 명시적으로 설계함으로써  이기종 언어로 Agent Server Cient를 작성할 수 있도록 확장성을 고려하였습니다.
 ## Frame Message Protocol ##
 
 Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
@@ -262,7 +268,7 @@ Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
 - INFO /health  : Agent Server에 Health 정보를 요청
 -  INFO /info  : Agent Server에 시스템 정보를 요청
 -  INFO /exist  : Agent Server에 특정 파일이 존재하는지 확인 요청
--  ACTION /session : 하나의 전송 트랜잭션이 대용량 파일의 분할 전송 처럼 순차 또는 병렬로 교환되는 여러 요청과 응답으로 처리되어야 하는 경우 완전한 처리를 보장하기 위해 사용될 session 생성을 Agent Server에 요청
+-  ACTION /session : 하나의 전송 트랜잭션이 순차 또는 병렬로 교환되는 여러 요청/응답으로 처리되어야 하는 경우 완전한 처리를 보장하기 위해 사용될 session 생성을 요청
 -  ACTION /merge : 병렬로 분할 전송된 대용량 파일의 병합 요청
 -  ACTION /shutdown : Agent Server Shutdown 요청
 -  GET : Agent Server에 특정 파일의 송신을 요청, 클라이언트에서 직접 수신
@@ -298,11 +304,11 @@ Agent Server의 요청과 응답 메시지는 다음과 같이 구성됩니다.
 
 경로와 파일을 지정하기 위해 Header 항목(Transfer-Source-Uri..., Transfer-Destination-Uri...)에 URI를 지정합니다. URI에는 전송 선후 처리(backup, delete, interceptor 실행 등)옵션을 지정하기 위한 parameter가 포함됩니다.
 
-> ex) agent://192.168.219.141:8024/9063C6480000.dat?&createAck=.done&onExist=overwriteOnExist
+> ` agent://${host}:${port}/9063C6480000.dat?&createAck=.done&onExist=overwriteOnExist`
 
 리소스의 목록 요청과 삭제 명령에 사용되는 URI에는 ant style pattern 문자열이 지정될 수 있습니다.
 
-> ex) agent://192.168.219.141:8024/backup/**/*
+>  `agent://${host}:${port}/backup/**/*`
 
 경로 URI에는 다음 항목들이 파라미터로 포함될 수 있습니다.
 
@@ -373,48 +379,62 @@ String uri= TransferMessageUtil.encodedUri( ${host} ${port}, "d324234.dat",
 
     // 3. 특정 파일이 Agent Server의 특정 위치에 존재하는지 확인
     public boolean requestResourceExist( Channel channel, String path, String site) throws Exception
-    public boolean requestResourceExist( Channel channel, String path, String site, long timeout) throws Exception
+    public boolean requestResourceExist( Channel channel, String path, String site, long timeout) 
+    throws Exception
 
     // 4. Agent Server로부터 특정 파일을 요청하여 수신된 파일을 처리
     // Functional Interface를 이용하여 응답 컨텐츠에 대한 처리를 작성
-    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, OptionParam... options
-     throws Exception
-    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, long timeout, 
-    OptionParam... options) throws Exception
+    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator,
+     OptionParam... options throws Exception
+    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, 
+    long timeout,  OptionParam... options) throws Exception
 
     // 5. 특정 파일을 Agent Server에서 삭제
     // 처리 결과로 정상적으로 삭제된 리소스목록을 가져온다.
-    public List<String> requestDeleteResources( Channel channel, String path, String site, OptionParam... options) throws Exception
-    public List<String> requestDeleteResources( Channel channel, String path, String site, long timeout, OptionParam... options) throws Exception
+    public List<String> requestDeleteResources( Channel channel, String path, String site, 
+    OptionParam... options)  throws Exception
+    public List<String> requestDeleteResources( Channel channel, String path, String site, long timeout, 
+    OptionParam... options) throws Exception
             
     // 6. 경로와 패턴 문자열을 이용하여 Agent Server로부터 리소스의 목록을 조회
-    public List<String> requestListResources( Channel channel, String path, String site, OptionParam... options) throws Exception
-    public List<String> requestListResources( Channel channel, String path, String site, long timeout, OptionParam... options) throws Exception
+    public List<String> requestListResources( Channel channel, String path, String site, 
+    OptionParam... options)  throws Exception
+    public List<String> requestListResources( Channel channel, String path, String site, long timeout, 
+    OptionParam... options) throws Exception
 
     // 7. Agent Server에 특정 파일을 전송
-    public boolean requestPutResource( Channel channel, File resource, String path, String site, OptionParam... options) throws Exception
+    public boolean requestPutResource( Channel channel, File resource, String path, String site, 
+    OptionParam... options) throws Exception
 
-    public boolean requestPutResource( Channel channel, File resource, String path, String site, long timeout, OptionParam... options) throws Exception
+    public boolean requestPutResource( Channel channel, File resource, String path, String site, long timeout, 
+    OptionParam... options) throws Exception
 
     // 8. 대형 파일을 병렬로 처리하여 Agent Server에 전송
-    public boolean requestPutParallelResource( File resource, String path, String site, OptionParam... options) throws Exception
+    public boolean requestPutParallelResource( File resource, String path, String site, OptionParam... options) 
+    throws Exception
     
     // 9. 특정 Agent Server에 Transfer 명령을 전송하여 다른 Agent Server에 파일을 전송하도록 요청
-    // sync 옵션이 true인 경우 전송 명령을 받은 Agent Server는 수신 Agetn로 전송을 완료 한 후 처리 결과를 응답합니다.
-    // sync 옵션이 false인 경우 전송 명령을 받은 Agent Server는 수신 Agent로 전송을 시작한 후 처리 중인 내용을 응답합니다.
-    public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, OptionParam... options) throws Exception
-    public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, long timeout, OptionParam... options) throws Exception
+    // sync 옵션이 true인 경우 전송 명령을 받은 Agent Server는 수신 Agetn로 전송을 완료 한 후 
+    // 처리 결과를 응답합니다.
+    // sync 옵션이 false인 경우 전송 명령을 받은 Agent Server는 수신 Agent로 전송을 시작한 후
+    // 처리 중인 내용을 응답합니다.
+    public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync,
+     OptionParam... options) throws Exception
+    public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, 
+    long timeout, OptionParam... options) throws Exception
             
     // 10. 원격 Agent Server를 shutdown
     public boolean requestShutdownCommand( Channel channel) throws Exception
 
     // 11. 범용적으로 사용할 수 있도록 ResponseComsumer Functional Interface를 인자로 받는 API
     // ResponseConsumer Function에서 응답으로 전달된 TransferMessage를 처리
-    public <R> R request( Channel channel, TransferMessage request, ResponseConsumer<TransferMessage, R> consumer)
-        throws RequestHandlerException, ResponseHandlerException
+    public <R> R request( Channel channel, TransferMessage request, 
+      ResponseConsumer<TransferMessage, R> consumer)
+      throws RequestHandlerException, ResponseHandlerException
 
-    public <R> R request( final Channel channel, TransferMessage request, ResponseConsumer<TransferMessage, R> consumer,
-            long timeout) throws RequestHandlerException, ResponseHandlerException
+    public <R> R request( final Channel channel, TransferMessage request, 
+      ResponseConsumer<TransferMessage, R> consumer, 
+      long timeout) throws RequestHandlerException, ResponseHandlerException
             
 ```
 
@@ -431,7 +451,8 @@ Agent Server에는 Server Instance별로 설정되어 모든 요청의 선후에
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="agentInterceptor" class="easymaster.transfer.file.interceptors.SimpleAgentInterceptor"/>
 </beans>
 ```  
@@ -446,11 +467,14 @@ Agent Server에는 Server Instance별로 설정되어 모든 요청의 선후에
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    xsi:schemaLocation="http://www.springframework.org/schema/beans 
+    http://www.springframework.org/schema/beans/spring-beans.xsd">
     <!-- 송신 전후에 실행되는 Interceptor -->
-    <bean id="simpleCustomTransferInterceptor" class="easymaster.transfer.file.interceptors.SimpleCustomTransferInterceptor"/>
+    <bean id="simpleCustomTransferInterceptor" 
+    class="easymaster.transfer.file.interceptors.SimpleCustomTransferInterceptor"/>
     <!-- 수신 전후에 실행되는 Interceptor -->
-    <bean id="simpleCustomReceiveInterceptor" class="easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor"/>
+    <bean id="simpleCustomReceiveInterceptor" 
+    class="easymaster.transfer.file.interceptors.SimpleCustomReceiveInterceptor"/>
 </beans>
 ```  
 ### Chunked Message 와 압축 송수신 ###
@@ -493,7 +517,7 @@ public class TransferChunkedContentEncoder implements ChunkedInput<TransferConte
 ```
 ### SSL 적용 ###
 
-안전한 연결과 데이터 송수신을 위해 설정을 이용하여 SSL 적용 여부를 지정할 수 있습니다.  이번 과제 구현에서는 self-signed 인증서를 사용하였으며 TransferClient에서 Insecure 인증서를 신뢰하도록 지정하였습니다. Root CA에 의해 서명된 인증서를 사용하기 위해서는  관련 소스의 변경이 필요합니다.
+안전한 연결과 데이터 송수신을 위해 설정을 이용하여 SSL 적용 여부를 지정할 수 있습니다.  이번 과제 구현에서는 self-signed 인증서를 사용하였으며 TransferClient에서 Insecure 인증서를 신뢰하도록 지정하였습니다. 관련 부분을 수정하여 Root CA에 의해 서명된 인증서를 적용할 수 있습니다.
 
 ```yaml
 transfer:
@@ -504,13 +528,15 @@ transfer:
 public class TransferServerConfiguration
 {
     @Bean
-    public ChannelInitializer<SocketChannel> channelInitializer( ApplicationContext applicationContext) throws Exception
+    public ChannelInitializer<SocketChannel> channelInitializer( ApplicationContext applicationContext) 
+    throws Exception
     {
         SslContext sslContext= null;
         if( environment.isSsl())
         {
             // self-signed인증서를 사용하고 있다. 
-            // sign인증서를 사용해야 하는 경우 사용자 지정 인증서를 사용할 수 있도록 설정 항목을 추가하고 아래 내용을 변경한다.
+            // sign인증서를 사용해야 하는 경우 사용자 지정 인증서를 사용할 수 있도록
+            // 설정 항목을 추가하고 아래 내용을 변경한다.
             SelfSignedCertificate ssc= new SelfSignedCertificate();
             sslContext= SslContextBuilder.forServer( ssc.certificate(), ssc.privateKey()).build();
         }
@@ -519,9 +545,9 @@ public class TransferServerConfiguration
 }
 
 ```
-### 별도의 암복호화 처리 ###
+### 암복호화 처리 ###
 
-별도의 암복화처리가 필요한 경우 위애 설명된 파일 송수신 간에 실생되는 선후처리기에서 암복화 모듈을 이용하여 처리할 수 있습니다.  암복화 처리에는 일반적으로 상용 암복화 모듈이 적용됩니다. 이번 과제에서는 암복화 처리 구간에서 해당 내용이 필요함을 로깅하는 것으로 대체합니다.
+별도의 암복화처리가 필요한 경우 위애 설명된 파일 송수신 간에 실생되는 선후처리기에서 암복화 모듈을 이용하여 처리할 수 있습니다.  암복화 처리에는 일반적으로 상용 암복화 모듈이 적용됩니다. 이번 과제에서는 암복화 처리 구간에서 해당 내용이 필요함을 로깅하는 것으로 대체하였습니다.
 
 ```java
 public class SimpleCustomTransferInterceptor implements TransferInterceptor
@@ -617,11 +643,12 @@ public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
                             ...
                             SplittedBuf splitted= reader.nextBuf( channel.alloc());
                             suffix= splitted.suffix;
-                            // 분할된 파일 이름을 고유한 이름으로 생성
-                            // .split%d로 지정된 suffix는 파일이 분할 순서대로 순차적으로 증가
+                            // 분할 전송될 파일 이름을 고유한 이름으로 생성
+                            // .split%d로 지정된 suffix는 분할 순서대로 순차적으로 증가
                             // @see easymaster.transfer.file.client.ChunkedNioFileBuf.SplittedBuf 
                             // @see easymaster.transfer.file.util.FileUtil
-                            splitname= FileUtil.onlyPath( path)+ PATH_SEPARATOR+ UUID.randomUUID().toString().replace( '-', '_')+ suffix;
+                            splitname= FileUtil.onlyPath( path)+ PATH_SEPARATOR
+                            + UUID.randomUUID().toString().replace( '-', '_')+ suffix;
                             buf= splitted.buf;
                             
                             // PUT 전송 명령 생성
@@ -632,16 +659,17 @@ public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
                             // 전송 명령 write
                             // 분할된 파일을 Chunk단위로 read, write
                             channel.writeAndFlush( request);
-                            TransferParallelContentEncoder chunk= new TransferParallelContentEncoder( buf, chunkSize);
+                            TransferParallelContentEncoder chunk= 
+                              new TransferParallelContentEncoder( buf, chunkSize);
                             channel.writeAndFlush( chunk);
 
                             // 전송 요청의 완료 응답을 대기
                             TransferClientHandler handler= (TransferClientHandler)channel.pipeline().last();
                             Future<TransferMessage> future= handler.sync();
                             TransferMessage response= future.get();
-                            TransferResponseCode rsCode= response.headers().getResponseCode();
 
                             // 분할된 파일 전송의 응답을 처리
+                            TransferResponseCode rsCode= response.headers().getResponseCode();
                             if( SUCCESS!= ResponseCode.valueOf( rsCode.code()))
                             {
                                 ...
@@ -704,7 +732,8 @@ public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
 public class TransferCommandRequestHandler extends AbstractRequestHandler
 {
   ...
-    private HandlerResponse handleTransferCommandRequest( final TransferMessage request) throws RequestHandlerException
+    private HandlerResponse handleTransferCommandRequest( final TransferMessage request) 
+      throws RequestHandlerException
     {
         ...
         Future<TransferExecutor.Result> handler= null;
@@ -745,9 +774,10 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
             trans.prepare();
             ...
 
-            // 전송 처리를 비동기로 처리하기 위해 별도의 Thread Executor를 사용한다. 
-            // validation option이 false인 경우 비동기로 전송 요청을 처리하고 전송 처리가 진행중임을 응답으로 전송한다.
-            // validation option이 true인 경우 비동기로 실행된 전송 요청의 처리 결과를 대기하여 전송 처리 완료 여부를 응답으로 전송한다. 
+            // 전송 처리를 비동기로 처리하기 위해 별도의 Thread Executor를 사용
+            // validation option이 false인 경우 비동기로 전송 요청을 처리하고 전송 처리가 진행중임을 응답으로 전송
+            // validation option이 true인 경우 비동기로 실행된 전송 요청의 처리 결과를 대기하여 
+            // 전송 처리 완료 여부를 응답으로 전송한다. 
             handler= TransferCommandExecutor.transferExecutor().submit( new Callable<TransferExecutor.Result>(){
                 @Override
                 public TransferExecutor.Result call() throws Exception
@@ -758,7 +788,8 @@ public class TransferCommandRequestHandler extends AbstractRequestHandler
             // validation option에 따른 완료 후 응답 또는 즉시 응답
             if( validation)
             {
-                TransferExecutor.Result result= timeout!= -1 ? handler.get( timeout, TimeUnit.SECONDS) : handler.get();
+                TransferExecutor.Result 
+                  result= timeout!= -1 ? handler.get( timeout, TimeUnit.SECONDS) : handler.get();
                ...
             }
             else
@@ -778,19 +809,21 @@ public class TransferExecutor
 
     public boolean prepare() throws Exception
     {
-        // 파일을 전송할 수신 Agent Server별로 전송 대상을 정리한다. 
+        // 파일을 전송할 수신 Agent Server별로 전송 대상을 정리
         this.group= tasks.stream().collect( groupingBy( Task::agentAddresses, toList()));
         logger.debug( "destination agent groups: {}", group);
         
         for( Map.Entry<List<String>, List<Task>> entry: group.entrySet())
         {
             ...
-            // 수신 Agent 서버에 파일이 이미 존재하고 FailOnExist Option인 경우 fast-fail 처리한다.
+            // 수신 Agent 서버에 파일이 이미 존재하고 FailOnExist Option인 경우 fast-fail 처리
             for( Task task: tasks)
             {
                 if( OptionParameter.contains( task.destOptions, ON_EXIST, FAIL_ONEXIST, true)
-                        && client.requestResourceExist( THROWAWAY, task.destinationPath, OptionParameter.first( task.destOptions, SITE)))
-                    throw new RequestHandlerException( ALREADY_EXIST, "target file["+ task.destinationPath+ "] is already exist");
+                        && client.requestResourceExist( THROWAWAY, task.destinationPath, 
+                        OptionParameter.first( task.destOptions, SITE)))
+                    throw new RequestHandlerException( ALREADY_EXIST, 
+                      "target file["+ task.destinationPath+ "] is already exist");
             }
         }
         return true;
@@ -802,27 +835,28 @@ public class TransferExecutor
         ExecutorService executor= null;
         try
         {
-            // Agent Server별로 접속하여 서버별 전송 파일을 전송한다.
+            // Agent Server별로 접속하여 서버별 전송 파일을 전송
             for( Map.Entry<List<String>, List<Task>> entry: group.entrySet())
             {
                 ...
                 // 하나의 AgentServer에 전달할 worker count를 계산한다. 
-                // 대용량 파일이 포함된 경우 최적화하여 계산되고 전체적으로 max size를 초과할 수 없다. 
+                // 대용량 파일이 포함된 경우 최적화하여 계산되고 전체적으로 max size를 초과할 수 없음
                 int workers= Math.min( MAX_WORKERS, optimizedWorkers( tasks));
 
-                // 수신 Agent Server에 연결을 시도한다. 목록으로 전달된 경우 다음 연결을 시도한다.
+                // 수신 Agent Server에 연결을 시도한다. 목록으로 전달된 경우 다음 연결을 시도
                 final TransferClient client= tryConnect( agents, workers);
                 if( client== null)
                 {
                     tasks.forEach( t->{
                         result.failed.getAndIncrement();
-                        result.reasons.add( "resource ["+ t.sourceUri+ "] transfering is failed. cause: agent is not responding");
+                        result.reasons.add( "resource ["+ t.sourceUri+ 
+                          "] transfering is failed. cause: agent is not responding");
                     });
                     continue;
                 }
 
-                // ThreadPool을 생성하여 작업을 요청한다.
-                // TaskRunner에서는 전달된 Client에 putParallelRequest를 호출한다.
+                // ThreadPool을 생성하여 작업을 요청
+                // TaskRunner에서는 전달된 Client에 putParallelRequest를 호출
                 executor= Executors.newFixedThreadPool( workers);
                 CountDownLatch latch= new CountDownLatch( tasks.size());
                 try
@@ -839,9 +873,9 @@ public class TransferExecutor
         finally { ...}
     }
 
-    // TransferClient에 전달할 worker count를 계산한다.
-    // 기본적으로 파일 수 만큼 증가한다. 
-    // 전송할 파일 중 대용량 파일에 대해서는 ParallelTransfer요청이 발생하므로 하나의 Thread를 더 사용하도록 한다.
+    // TransferClient에 전달할 worker count를 계산
+    // 기본적으로 파일 수 만큼 증가
+    // 전송할 파일 중 대용량 파일에 대해서는 ParallelTransfer요청이 발생하므로 하나의 Thread를 더 사용
     private int optimizedWorkers( List<Task> tasks)
     {
         return tasks.stream()
@@ -865,7 +899,7 @@ public class TransferExecutor
             {
                 ..
                 File resource= new File( task.sourcePath);
-                // 대용량 파일인 경우 판단하여 처리할 수 있도록 requestPutParallelResource를 호출한다. 
+                // 대용량 파일인 경우 판단하여 처리할 수 있도록 requestPutParallelResource를 호출
                 ret= client.requestPutParallelResource( resource, task.destinationPath, site,
                         params.toArray( new OptionParameter[params.size()]));
 
@@ -880,12 +914,13 @@ public class TransferExecutor
 
 ```
 
-### 메시지 처리를 위한 Codec과 Encoder, Decoder ###
+### 프로코콜 메시지 처리를 위한 Codec과 Encoder, Decoder ###
 
-이번 과제는 Netty Framework를 이용하여 구현되었으며 메시지 프로토콜을 정의하였습니다.  메시지는 URI를 포함하는 COMMAND 영역과 HEADER영역,  CONTENT영역으로 구분되며 Chunk단위로 전송됩니다. 이를 처리하기 위한 다음 `TransferMessageServerCodec`과 `TransferMessageEncoder`, `TransferMessageDecoder`를 작성하였습니다. 통신 구간의 주요 로직을 설명하기 위해 아래 내용을 추가합니다.
+이번 과제는 Netty Framework를 이용하여 구현되었으며 메시지 프로토콜을 정의하였습니다.  메시지는 URI를 포함하는 COMMAND 영역과 HEADER영역,  CONTENT영역으로 구분되며 Chunk단위로 전송됩니다. 이를 처리하기 위한 다음 `TransferMessageServerCodec`과 `TransferMessageEncoder`, `TransferMessageDecoder`를 작성하였습니다. 다음에서는 통신 구간의 주요 로직을 설명합니다.
 
 ```java
-public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<TransferMessageDecoder, TransferMessageEncoder>
+public class TransferMessageServerCodec 
+  extends CombinedChannelDuplexHandler<TransferMessageDecoder, TransferMessageEncoder>
 {
     ...
     private final class Encoder extends TransferMessageEncoder
@@ -895,7 +930,7 @@ public class TransferMessageServerCodec extends CombinedChannelDuplexHandler<Tra
         {
             if( msg instanceof TransferMessage)
             {
-                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신한다. 
+                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신
                 ...
             }
             
@@ -932,19 +967,19 @@ public class TransferMessageDecoder extends ByteToMessageDecoder
                 ...
                 break;
             case SKIP_CONTROL_CHARS:
-                // ASCII Control Character가 전송된 경우 skip한다.
+                // ASCII Control Character가 전송된 경우 skip
             case READ_INITIAL:
-                // 처음 발생하는 HEADER LINE을 해석한다.
+                // 처음 발생하는 HEADER LINE을 해석
             case READ_HEADER:
-                // HEADER 내용을 해석한다.
+                // HEADER 내용을 해석
             case READ_FIXED_LENGTH_CONTENT:
-                // 고정 길이로 전달된 메시지를 해석한다.
+                // 고정 길이로 전달된 메시지를 해석
             case READ_CHUNK_SIZE:
-                // CHUNK SIZE가 발생한 경우 처리한다.
+                // CHUNK SIZE가 발생한 경우 처리
             case READ_CHUNKED_CONTENT:
-                // CHUNKED CONTENT를 변환한다.
+                // CHUNKED CONTENT를 변환
             case READ_CHUNKED_DELIMITER:
-                // CHUNK DELIMITER를 처리한다.
+                // CHUNK DELIMITER를 처리
         }
     }
 }
@@ -955,13 +990,13 @@ public class TransferMessageEncoder extends MessageToMessageEncoder<TransferObje
     @Override
     public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
     {
-      // HEADER 구간의 메시지를 변환한다.
+      // HEADER 구간의 메시지를 변환
         if( msg instanceof TransferMessage)
         {
           ...
         }
 
-        //..CONTENT 구간의 내용을 Chunk단위로 전송할 수 있도록 변환한다.
+        //..CONTENT 구간의 내용을 Chunk단위로 전송할 수 있도록 변환
         if( msg instanceof TransferContent)
         {
             ...
@@ -991,12 +1026,14 @@ public class TransferServerHandler extends SimpleChannelInboundHandler<TransferO
             {
                 case ACTION_:
                     // ACTION command 처리
-                    ActionCommandRequestHandler actHandler= new ActionCommandRequestHandler( context, applicationContext, environment);
+                    ActionCommandRequestHandler actHandler=
+                       new ActionCommandRequestHandler( context, applicationContext, environment);
                     actHandler.handleCommand( request);
                     break;
                 case INFO_:
                     // INFO command 처리
-                    InfoCommandRequestHandler infHandle= new InfoCommandRequestHandler( context, applicationContext, environment);
+                    InfoCommandRequestHandler infHandle=
+                       new InfoCommandRequestHandler( context, applicationContext, environment);
                     infHandle.handleCommand( request);
                     break;
                 case PUT_:
@@ -1004,12 +1041,14 @@ public class TransferServerHandler extends SimpleChannelInboundHandler<TransferO
                 case GET_:
                 case LIST_:
                     // RESOURCE command {PUT | DELETE | GET | LIST} 처리
-                    ResourceCommandRequestHandler rsHandler= new ResourceCommandRequestHandler( context, applicationContext, environment);
+                    ResourceCommandRequestHandler rsHandler= 
+                      new ResourceCommandRequestHandler( context, applicationContext, environment);
                     rsHandler.handleCommand( request);
                     break;
                 case TRANSFER_:
                     // TRANSFER command {PUT | DELETE | GET | LIST} 처리
-                    TransferCommandRequestHandler trHandler= new TransferCommandRequestHandler( context, applicationContext, environment);
+                    TransferCommandRequestHandler trHandler=
+                       new TransferCommandRequestHandler( context, applicationContext, environment);
                     trHandler.handleCommand( request);
                     break;
             }
@@ -1039,5 +1078,196 @@ public class TransferServerHandler extends SimpleChannelInboundHandler<TransferO
 
 ## 시연 내용과 방법 ##
 
-시연을 위해서는 두 개의 Agent Server 인스턴스와 하나의 클라이언트가 필요합니다. 이번 과제 시연에서는 별도의 설치 과정을 생략하기 위해 ${project.basedir}/demo 위치에 `fserver-`, `fserver-2`, `transfer-client`를 미리 구성하였습니다.
+시연을 위해서는 두 개의 Agent Server 인스턴스와 하나의 클라이언트가 필요합니다. 이번 과제 시연에서는 별도의 설치 과정을 생략하기 위해 ${project.basedir}/demo 위치에 `fserver-1`, `fserver-2`, `fserver-client`를 미리 구성하였습니다.
 
+시연을 위해 설치 위치로 이동하여 Agent Server를 시작합니다.
+
+### Linux ###
+
+- Linux Terminal - 1
+```bash
+cd ${project.basedir}/demo/fserver-1
+./agent-server.sh start
+tail -f ./logs/transfer-file.log
+```
+- Linux Terminal - 2
+```bash
+cd ${project.basedir}/demo/fserver-2
+./agent-server.sh start
+tail -f ./logs/transfer-file.log
+```
+
+### Windows ###
+
+- 명령 프롬프트 - 1 
+```
+cd ${project.basedir}\demo\fserver-1
+agent-server.bat start
+```
+
+- 명령 프롬프트 - 2
+```
+cd ${project.basedir}\demo\fserver-2
+agent-server.bat start
+```
+
+## Client to Server Resources ##
+
+제공된  라이브러리를 이용하여 작성된 클라이언트에서 파일을 전송하고 요청하여 수신하거나 파일 정보를 요청하는 내용을 확인합니다. 라이브러리는 별도의 단위 시스템에 적용되어 Transfer File Agent Server로의 요청을 작성하는 데 사용됩니다.
+### PUT Resource ###
+
+단위 시스템 또는 사용자 환경에서 파일을 전송합니다.
+
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+cd ${project.basedir}/demo/fserver-client
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain put localhost 8024 ./parallel-content.zip
+```
+
+###  Windows ###
+  - 명령 프롬프트 - 3
+```
+cd ${project.basedir}\demo\fserver-client
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain put localhost 8024 ./parallel-content.zip
+```
+
+**fserver-1 repository 의 파일 저장 위치를 확인합니다.**
+
+### PUT Parallel Resource ###
+
+단위 시스템 또는 사용자 환경에서 대용량 파일을 병렬처리하여 전송합니다.
+
+###  Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain putParallel localhost 8024 ./parallel-content.zip
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain putParallel localhost 8024 ./parallel-content.zip
+```
+
+### GET Resource ###
+
+Transfer File Agent에 요청하여 단위 시스템 또는 사용자 환경으로 파일을 수신합니다.
+
+###  Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain get localhost 8024
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain get localhost 8024
+```
+
+**fserver-1 리파지토리 의 파일 저장 위치를 확인합니다.**
+### EXIST Resource ###
+
+Transfer File Agent에 요청을 전송하여 Transfer File Agent 리파지토리에 파일이 있는지 확인합니다.
+
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain exist localhost 8024
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain exist localhost 8024
+```
+
+**서버 응답과 로그를 확인합니다.**
+## Server to Server Resources ##
+
+Transfer File Agent간의 파일 전송 명령을 전달하여 Agent Server간에 파일을 전송합니다.
+### TRANSFER Resource ###
+
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain transfer localhost 8024 localhost 8025
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain transfer localhost 8024 localhost 8025
+```
+
+**fserver-1, fserver-2 리파지토리와 파일 저장 위치에서 생성파일들을 을 확인합니다.**
+
+## Management ##
+
+Transfer File Agent는 Server의 정상 여부를 확인하기 위한 서비스와 운영 정보를 제공하는 서비스를 포함하고 있습니다.
+### Health Check ###
+
+Transfer File Agent에 Server의 정상 동작 여부를 요청하여 확인합니다.
+
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain health localhost 8024
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain health localhost 8024
+```
+
+**서버 응답과 로그를 확인합니다.**
+### Information ###
+
+Transfer File Agent에는 Server의 운영 정보를 요청하여 확인합니다.
+
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain info localhost 8024
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain info localhost 8024
+```
+
+**서버 응답과 로그를 확인합니다.**
+### Shutdown endpoint ###
+
+Transfer File Agent에 명령을 전송하여 Server를 중지시킵니다.
+### Linux ###
+
+- Linux Terminal - 3
+```bash
+java -cp "./lib/*:./lib" easymaster.transfer.file.client.QuicktimeTestMain shutdown localhost 8024
+```
+
+### Windows ###
+
+  - 명령 프롬프트 - 3
+```
+java -cp "./lib/*;./lib" easymaster.transfer.file.client.QuicktimeTestMain shutdown localhost 8024
+```
+
+**서버 응답과 로그를 확인합니다.**
