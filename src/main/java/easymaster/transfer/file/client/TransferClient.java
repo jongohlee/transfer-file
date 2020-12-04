@@ -102,6 +102,7 @@ import io.netty.util.concurrent.Future;
 import io.netty.util.internal.ObjectUtil;
 
 /**
+ * Transfer File Agent Server를 위한 Client APIs
  * @author Jongoh Lee
  *
  */
@@ -110,10 +111,12 @@ public class TransferClient
 {
     private Logger logger= LoggerFactory.getLogger( TransferClient.class);
 
+    // 사용자 작업 요청시 매번 Channel을 생성하는 옵션을 위해 사용
     public static Channel THROWAWAY= null;
 
     public static final int MAX_WORKERS= 10;
     
+    // putParallelRequest를 사용할 지 여부를 판단하는 기준으로 사용
     public static final int MIN_PARALLEL_CHUNK= 1* 1024* 1024;
     
     public static final int MAX_PARALLEL_CHUNK= 256* 1024* 1024;
@@ -132,22 +135,59 @@ public class TransferClient
 
     private Bootstrap bootstrap;
 
+    /**
+     * Transfer Agent Server에 연결
+     * @param host 연결할 원격 Agent Server hostname
+     * @param port 연결할 원격 Agent Server port
+     * @return TransferClient
+     */
     public static TransferClient create( String host, int port)
     {
         return create( ".", 2, 5000, true, host, port, MIN_PARALLEL_CHUNK);
     }
 
+    /**
+     * 
+     * Transfer Agent Server에 연결
+     * @param host 연결할 원격 Agent Server hostname
+     * @param port 연결할 원격 Agent Server port
+     * @param workers bootstrap worker count
+     * @return TransferClient
+     */
     public static TransferClient create( String host, int port, int workers)
     {
         return create( ".", workers, 5000, true, host, port, MIN_PARALLEL_CHUNK);
     }
     
+    /**
+     * 
+     * Transfer Agent Server에 연결
+     * @param basedir 클라이언트 파일 작업의 base directory
+     * @param workers bootstrap worker count
+     * @param connectTimeoutMillis 연결 제한 시간
+     * @param supportSsl ssl 사용 여부
+     * @param host 연결할 원격 Agent Server hostname
+     * @param port 연결할 원격 Agent Server port
+     * @return TransferClient
+     */
     public static TransferClient create( String basedir, int workers, int connectTimeoutMillis, boolean supportSsl,
             String host, int port)
     {
         return new TransferClient( basedir, workers, connectTimeoutMillis, supportSsl, host, port, MIN_PARALLEL_CHUNK);
     }
 
+    /**
+     * 
+     * Transfer Agent Server에 연결
+     * @param basedir 클라이언트 파일 작업의 base directory
+     * @param workers bootstrap worker count
+     * @param connectTimeoutMillis 연결 제한 시간
+     * @param supportSsl ssl 사용 여부
+     * @param host 연결할 원격 Agent Server hostname
+     * @param port 연결할 원격 Agent Server port
+     * @param chunkSize chunkSize
+     * @return TransferClient
+     */
     public static TransferClient create( String basedir, int workers, int connectTimeoutMillis, boolean supportSsl,
             String host, int port, int chunkSize)
     {
@@ -181,6 +221,9 @@ public class TransferClient
                 protected void initChannel( Channel ch) throws Exception
                 {
                     ChannelPipeline pipeline= ch.pipeline();
+                    // self-signed certificates를 위한 InsecureTrustManager
+                    // ROOT CA signed certificates를 사용하는 경우 설정과 
+                    // easymaster.transfer.file.handler.TransferServerInitializer 부분을 함께 수정
                     if( ssl)
                         pipeline.addLast( SslContextBuilder.forClient().trustManager( 
                                 InsecureTrustManagerFactory.INSTANCE).build().newHandler( ch.alloc()));
@@ -196,6 +239,11 @@ public class TransferClient
         return true;
     }
 
+    /**
+     * 클라이언트에서 Channel 생성을 요청하여 재사용하기 위해 사용된다.
+     * @return Channel
+     * @throws RequestHandlerException
+     */
     public Channel connect() throws RequestHandlerException
     {
         try{ return bootstrap.connect( remote).sync().channel();}
@@ -205,12 +253,33 @@ public class TransferClient
         }
     }
 
+    /**
+     * Transfer File Agent Server로 메시지를 전달하고 응답을 처리한다.
+     * @param <R> Agent Server 응답을 처리하여 변환할 타입
+     * @param channel channel
+     * @param request 요청 메시지로 TransferMessage 타입으로 작성된다. COMMAND, URI, HEADER, CONTENT 부분으로 구성된다.
+     * @param consumer Agent Server 응답을 처리할 Consumer
+     * @return Agent Server응답을 Consumer에서 처리할 결과를 리턴
+     * @throws RequestHandlerException
+     * @throws ResponseHandlerException
+     */
     public <R> R request( Channel channel, TransferMessage request, ResponseConsumer<TransferMessage, R> consumer)
         throws RequestHandlerException, ResponseHandlerException
     {
         return request( channel, request, consumer, -1);
     }
 
+    /**
+     * Transfer File Agent Server로 메시지를 전달하고 응답을 처리한다.
+     * @param <R> Agent Server 응답을 처리하여 변환할 타입
+     * @param channel channel
+     * @param request 요청 메시지로 TransferMessage 타입으로 작성된다. COMMAND, URI, HEADER, CONTENT 부분으로 구성된다.
+     * @param consumer Agent Server 응답을 처리할 Consumer
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @return Agent Server응답을 Consumer에서 처리할 결과를 리턴
+     * @throws RequestHandlerException
+     * @throws ResponseHandlerException
+     */
     public <R> R request( final Channel channel, TransferMessage request, ResponseConsumer<TransferMessage, R> consumer, long timeout) 
             throws RequestHandlerException, ResponseHandlerException
     {
@@ -263,6 +332,12 @@ public class TransferClient
         }
     }
 
+    /**
+     * Agent Server의 정보를 수신한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @return Agent Server의 정보 Map
+     * @throws Exception
+     */
     public Map<String, String> requestServerInfo( Channel channel) throws Exception
     {
         return requestServerInfo( channel, -1);
@@ -281,11 +356,25 @@ public class TransferClient
         } , timeout);
     }
 
+    /**
+     * Agent Server의 상태 정보를 수신한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @return Health
+     * @throws Exception
+     */
     public Health requestHealth( Channel channel) throws Exception
     {
         return requestHealth( channel, -1);
     }
 
+    /**
+     * 
+     * Agent Server의 상태 정보를 수신한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @return Health
+     * @throws Exception
+     */
     public Health requestHealth( Channel channel, long timeout) throws Exception
     {
         Channel writtable= channel!= THROWAWAY ? channel : connect();
@@ -319,11 +408,28 @@ public class TransferClient
         }
     }
 
+    /**
+     * Agent Server에 요청한 파일이 Repository에 있는지 확인한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @return exist
+     * @throws Exception
+     */
     public boolean requestResourceExist( Channel channel, String path, String site) throws Exception
     {
         return requestResourceExist( channel, path, site, -1);
     }
 
+    /**
+     * Agent Server에 요청한 파일이 Repository에 있는지 확인한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout     
+     * @return exist
+     * @throws Exception
+     */
     public boolean requestResourceExist( Channel channel, String path, String site, long timeout) throws Exception
     {
         TransferMessage request= new TransferMessage( INFO);
@@ -337,12 +443,35 @@ public class TransferClient
         } , timeout);
     }
 
-    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, OptionParameter... options) 
-            throws Exception
+    /**
+     * Agent Server에 파일을 요청하여 수신하고 이를 처리한 결과를 리턴한다.
+     * @param <R> Agent Server 응답을 처리하여 변환할 타입
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param operator Agent Server의 파일 응답을 처리할 Operator
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 파일 응답을 처리한 결과를 리턴
+     * @throws Exception
+     */
+    public <R> R requestGetResource( Channel channel, String path, String site, Function<FileData, R> operator, 
+            OptionParameter... options) throws Exception
     {
         return requestGetResource( channel, path, site, operator, -1, options);
     }
 
+    /**
+     * Agent Server에 파일을 요청하여 수신하고 이를 처리한 결과를 리턴한다.
+     * @param <R> Agent Server 응답을 처리하여 변환할 타입
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param operator Agent Server의 파일 응답을 처리할 Operator
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 파일 응답을 처리한 결과를 리턴
+     * @throws Exception
+     */
     public <R> R requestGetResource( Channel channel, String path, String site,
             Function<FileData, R> operator, long timeout, OptionParameter... options) throws Exception
     {
@@ -363,12 +492,31 @@ public class TransferClient
         } , timeout);
     }
 
+    /**
+     * Agent Server Repository에서 파일을 삭제한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 처리결과 목록
+     * @throws Exception
+     */
     public List<String> requestDeleteResources( Channel channel, String path, String site, OptionParameter... options)
             throws Exception
     {
         return requestDeleteResources( channel, path, site, -1, options);
     }
 
+    /**
+     * Agent Server Repository에서 파일을 삭제한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 처리결과 목록
+     * @throws Exception
+     */
     public List<String> requestDeleteResources( Channel channel, String path, String site, long timeout, OptionParameter... options) 
             throws Exception
     {
@@ -387,12 +535,31 @@ public class TransferClient
         } , timeout);
     }
     
+    /**
+     * Agent Server Repository에서 전달한 패턴과 일치하는 파일의 목록을 확인한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로로 Ant Pattern을 사용한다.
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 전달된 패턴과 일치하는 파일 목록
+     * @throws Exception
+     */
     public List<String> requestListResources( Channel channel, String path, String site, OptionParameter... options)
             throws Exception
     {
         return requestListResources( channel, path, site, -1, options);
     }
 
+    /**
+     * Agent Server Repository에서 전달한 패턴과 일치하는 파일의 목록을 확인한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param path 파일 경로로 Ant Pattern을 사용한다.
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return 전달된 패턴과 일치하는 파일 목록
+     * @throws Exception
+     */
     public List<String> requestListResources( Channel channel, String path, String site,
             long timeout, OptionParameter... options) throws Exception
     {
@@ -411,14 +578,35 @@ public class TransferClient
         } , timeout);
     }
 
+    /**
+     * Agent Server에 파일을 전송한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param resource 전송할 파일
+     * @param path Agent Server의 저장 위치
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
     public boolean requestPutResource( Channel channel,
             File resource, String path, String site, OptionParameter... options) throws Exception
     {
         return requestPutResource( channel, resource, path, site, -1, options);
     }
 
-    public boolean requestPutResource( Channel channel, File resource, String path, String site, long timeout, OptionParameter... options) 
-            throws Exception
+    /**
+     * Agent Server에 파일을 전송한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param resource 전송할 파일
+     * @param path Agent Server의 저장 위치
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
+    public boolean requestPutResource( Channel channel, File resource, String path, String site, long timeout, 
+            OptionParameter... options) throws Exception
     {
         if( !resource.exists() || resource.isDirectory())
             throw new RequestHandlerException( SOURCE_FILE_NOT_FOUND, resource.getAbsolutePath());
@@ -505,10 +693,10 @@ public class TransferClient
     /**
      * 수신 Agent Server에 파일을 분한하여 전송
      * 분할 전송이 완료된 뒤에는 Merge Command를 송신하여 수신 Agent Server에서 분할 수신된 파일을 Merge되도록 한다.
-     * @param resource 전송 파일
-     * @param path 수신 위치
-     * @param site 업무 그룹
-     * @param options 옵션 파라미터 목록
+     * @param resource 전송할 파일
+     * @param path Agent Server의 저장 위치
+     * @param site 업무 그룹으로 Root Repository의 경우 null
+     * @param options Agent Server에 파라미터로 전달할 Options
      * @return boolean 처리 결과
      * @throws Exception
      */
@@ -709,12 +897,33 @@ public class TransferClient
         }
     }
 
+    /**
+     * Agent Server에 다른 Agent Server로의 파일 전송을 명령한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param trans 전송을 요청할 파일의 목록과 대상 Agent Server목록을 지정한 TransferRequest List
+     * @param sync 파일을 전송하는 Agent는 서버는 sync option에 따라 비동기 전송 후 처리 중 상태를 응답하거나(sync false)
+     *  전송 완료후 처리 결과를 리턴한다.(sync false)
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
     public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, OptionParameter... options) 
             throws Exception
     {
         return requestTransferResources( channel, trans, sync, -1, options);
     }
 
+    /**
+     * Agent Server에 다른 Agent Server로의 파일 전송을 명령한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @param trans 전송을 요청할 파일의 목록과 대상 Agent Server목록을 지정한 TransferRequest List
+     * @param sync 파일을 전송하는 Agent는 서버는 sync option에 따라 비동기 전송 후 처리 중 상태를 응답하거나(sync false)
+     *  전송 완료후 처리 결과를 리턴한다.(sync false)
+     * @param timeout Agent Server에서 처리를 완료할 때까지의 timeout
+     * @param options Agent Server에 파라미터로 전달할 Options
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
     public boolean requestTransferResources( Channel channel, List<TransferRequest> trans, boolean sync, long timeout, 
             OptionParameter... options) throws Exception
     {
@@ -759,6 +968,12 @@ public class TransferClient
         } , -1);
     }
 
+    /**
+     * Agent Server에 shutdown 명령을 전달한다.
+     * @param channel channel로 생성하여 전달하거나 TransferClient.THROWAWAY를 전달하여 생성하도록 요청할 수 있다.
+     * @return boolean 처리 결과
+     * @throws Exception
+     */
     public boolean requestShutdownCommand( Channel channel) throws Exception
     {
         TransferMessage request= new TransferMessage( ACTION);
@@ -766,6 +981,9 @@ public class TransferClient
         return request( channel, request, response->{ return true; });
     }
 
+    /**
+     * TransferClient shutdown
+     */
     public void shutdown()
     {
         File tempDir= new File( this.baseDir, "tmp");
@@ -775,6 +993,12 @@ public class TransferClient
             workerGroup.shutdownGracefully();
     }
 
+    /**
+     * TransferClient shutdown
+     * @param quietPeriod netty quietPeriod
+     * @param timeout timeout
+     * @param unit
+     */
     public void shutdown( long quietPeriod, long timeout, TimeUnit unit)
     {
         File tempDir= new File( this.baseDir, "tmp");

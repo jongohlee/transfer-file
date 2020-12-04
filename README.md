@@ -440,6 +440,170 @@ String uri= TransferMessageUtil.encodedUri( ${host} ${port}, "d324234.dat",
 
 - - -
 
+
+### 메시지 처리를 위한 Codec과 Encoder, Decoder ###
+
+이번 과제는 Netty Framework를 이용하여 구현되었으며 메시지 프로토콜을 정의하였습니다.  메시지는 URI를 포함하는 COMMAND 영역과 HEADER영역,  CONTENT영역으로 구분되며 Chunk단위로 전송됩니다. 이를 처리하기 위한 다음 `TransferMessageServerCodec`과 `TransferMessageEncoder`, `TransferMessageDecoder`를 작성하였습니다. 다음에서는 통신 구간의 주요 로직을 설명합니다.
+
+```java
+public class TransferMessageServerCodec 
+  extends CombinedChannelDuplexHandler<TransferMessageDecoder, TransferMessageEncoder>
+{
+    ...
+    private final class Encoder extends TransferMessageEncoder
+    {
+        @Override
+        public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
+        {
+            if( msg instanceof TransferMessage)
+            {
+                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신
+                ...
+            }
+            
+            // 전송 데이터를 메시지로 변환한다.
+            super.encode( ctx, msg, out);
+            if( failOnMissinResponse && msg instanceof TransferMessage)
+                requestResponseCounter.decrementAndGet();
+        }
+    }
+    
+    private final class Decoder extends TransferMessageDecoder
+    {
+        @Override
+        public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
+        {
+            int before= out.size();
+            // 전달된 메시지를 해석한다.
+            super.decode( ctx, in, out);
+            ...
+        }
+        ...
+    }
+}
+
+public class TransferMessageDecoder extends ByteToMessageDecoder
+{
+    ...
+    @Override
+    public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
+    {
+        switch( currentState)
+        {
+            case BAD_MESSAGE:
+                ...
+                break;
+            case SKIP_CONTROL_CHARS:
+                // ASCII Control Character가 전송된 경우 skip
+            case READ_INITIAL:
+                // 처음 발생하는 HEADER LINE을 해석
+            case READ_HEADER:
+                // HEADER 내용을 해석
+            case READ_FIXED_LENGTH_CONTENT:
+                // 고정 길이로 전달된 메시지를 해석
+            case READ_CHUNK_SIZE:
+                // CHUNK SIZE가 발생한 경우 처리
+            case READ_CHUNKED_CONTENT:
+                // CHUNKED CONTENT를 변환
+            case READ_CHUNKED_DELIMITER:
+                // CHUNK DELIMITER를 처리
+        }
+    }
+}
+
+public class TransferMessageEncoder extends MessageToMessageEncoder<TransferObject>
+{
+    ...
+    @Override
+    public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
+    {
+      // HEADER 구간의 메시지를 변환
+        if( msg instanceof TransferMessage)
+        {
+          ...
+        }
+
+        //..CONTENT 구간의 내용을 Chunk단위로 전송할 수 있도록 변환
+        if( msg instanceof TransferContent)
+        {
+            ...
+        }
+    }
+
+
+...
+}
+
+public class TransferServerHandler extends SimpleChannelInboundHandler<TransferObject>
+{
+    ...
+    
+    @Override
+    public void channelRead0( ChannelHandlerContext context, TransferObject message) throws Exception
+    {
+        // chunk단위로 수신되는 메시지를 모두 수신 또는 단일 프레임으로 전송된 요청 메시지 수산 완료
+        if( message instanceof LastTransferContent)
+        {
+            ...
+            // Agent 선처리기 호출
+            if( !preProcesses( context))
+                return;
+            
+            switch( request.command().name())
+            {
+                case ACTION_:
+                    // ACTION command 처리
+                    ActionCommandRequestHandler actHandler=
+                       new ActionCommandRequestHandler( context, applicationContext, environment);
+                    actHandler.handleCommand( request);
+                    break;
+                case INFO_:
+                    // INFO command 처리
+                    InfoCommandRequestHandler infHandle=
+                       new InfoCommandRequestHandler( context, applicationContext, environment);
+                    infHandle.handleCommand( request);
+                    break;
+                case PUT_:
+                case DELETE_:
+                case GET_:
+                case LIST_:
+                    // RESOURCE command {PUT | DELETE | GET | LIST} 처리
+                    ResourceCommandRequestHandler rsHandler= 
+                      new ResourceCommandRequestHandler( context, applicationContext, environment);
+                    rsHandler.handleCommand( request);
+                    break;
+                case TRANSFER_:
+                    // TRANSFER command {PUT | DELETE | GET | LIST} 처리
+                    TransferCommandRequestHandler trHandler=
+                       new TransferCommandRequestHandler( context, applicationContext, environment);
+                    trHandler.handleCommand( request);
+                    break;
+            }
+            /// Agent 후처리기 호출
+            if( !postProcesses( context))
+                return;
+
+                // Agent 완료처리기 호출
+            if( !afterCompletions( context))
+                return;
+
+            if( closeRequired( request.headers()))
+                context.writeAndFlush( EMPTY_BUFFER).addListener( CLOSE);
+            return;
+        }
+        
+        if( message instanceof TransferMessage) // 프레임의 헤더 부분 read
+            request= (TransferMessage)message;
+        else if( message instanceof TransferContent)    // 프레임의 파일 컨텐트 부분 read
+        {
+            ...
+        }
+    }
+}    
+
+```
+
+
 ### 사용자 지정 선후처리기 ###
 
 **System Interceptors**
@@ -600,8 +764,8 @@ public class SimpleCustomReceiveInterceptor implements ReceiveInterceptor
      * @return boolean 처리 결과
      * @throws Exception
      */
-    public boolean requestPutParallelResource( File resource, String path, String site, OptionParameter... options)
-            throws Exception
+    public boolean requestPutParallelResource( File resource, String path, String site,
+     OptionParameter... options) throws Exception
     {
           ...
         // 기본 Chunked 전송 방식으로 처리하기에 충분한 크기인 경우 기본 Put Request로 처리한다.
@@ -914,167 +1078,6 @@ public class TransferExecutor
 
 ```
 
-### 프로코콜 메시지 처리를 위한 Codec과 Encoder, Decoder ###
-
-이번 과제는 Netty Framework를 이용하여 구현되었으며 메시지 프로토콜을 정의하였습니다.  메시지는 URI를 포함하는 COMMAND 영역과 HEADER영역,  CONTENT영역으로 구분되며 Chunk단위로 전송됩니다. 이를 처리하기 위한 다음 `TransferMessageServerCodec`과 `TransferMessageEncoder`, `TransferMessageDecoder`를 작성하였습니다. 다음에서는 통신 구간의 주요 로직을 설명합니다.
-
-```java
-public class TransferMessageServerCodec 
-  extends CombinedChannelDuplexHandler<TransferMessageDecoder, TransferMessageEncoder>
-{
-    ...
-    private final class Encoder extends TransferMessageEncoder
-    {
-        @Override
-        public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
-        {
-            if( msg instanceof TransferMessage)
-            {
-                // 실제 연결 정보를 기준으로 요청 Agent 정보를 갱신
-                ...
-            }
-            
-            // 전송 데이터를 메시지로 변환한다.
-            super.encode( ctx, msg, out);
-            if( failOnMissinResponse && msg instanceof TransferMessage)
-                requestResponseCounter.decrementAndGet();
-        }
-    }
-    
-    private final class Decoder extends TransferMessageDecoder
-    {
-        @Override
-        public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
-        {
-            int before= out.size();
-            // 전달된 메시지를 해석한다.
-            super.decode( ctx, in, out);
-            ...
-        }
-        ...
-    }
-}
-
-public class TransferMessageDecoder extends ByteToMessageDecoder
-{
-    ...
-    @Override
-    public void decode( ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception
-    {
-        switch( currentState)
-        {
-            case BAD_MESSAGE:
-                ...
-                break;
-            case SKIP_CONTROL_CHARS:
-                // ASCII Control Character가 전송된 경우 skip
-            case READ_INITIAL:
-                // 처음 발생하는 HEADER LINE을 해석
-            case READ_HEADER:
-                // HEADER 내용을 해석
-            case READ_FIXED_LENGTH_CONTENT:
-                // 고정 길이로 전달된 메시지를 해석
-            case READ_CHUNK_SIZE:
-                // CHUNK SIZE가 발생한 경우 처리
-            case READ_CHUNKED_CONTENT:
-                // CHUNKED CONTENT를 변환
-            case READ_CHUNKED_DELIMITER:
-                // CHUNK DELIMITER를 처리
-        }
-    }
-}
-
-public class TransferMessageEncoder extends MessageToMessageEncoder<TransferObject>
-{
-    ...
-    @Override
-    public void encode( ChannelHandlerContext ctx, TransferObject msg, List<Object> out) throws Exception
-    {
-      // HEADER 구간의 메시지를 변환
-        if( msg instanceof TransferMessage)
-        {
-          ...
-        }
-
-        //..CONTENT 구간의 내용을 Chunk단위로 전송할 수 있도록 변환
-        if( msg instanceof TransferContent)
-        {
-            ...
-        }
-    }
-
-
-...
-}
-
-public class TransferServerHandler extends SimpleChannelInboundHandler<TransferObject>
-{
-    ...
-    
-    @Override
-    public void channelRead0( ChannelHandlerContext context, TransferObject message) throws Exception
-    {
-        // chunk단위로 수신되는 메시지를 모두 수신 또는 단일 프레임으로 전송된 요청 메시지 수산 완료
-        if( message instanceof LastTransferContent)
-        {
-            ...
-            // Agent 선처리기 호출
-            if( !preProcesses( context))
-                return;
-            
-            switch( request.command().name())
-            {
-                case ACTION_:
-                    // ACTION command 처리
-                    ActionCommandRequestHandler actHandler=
-                       new ActionCommandRequestHandler( context, applicationContext, environment);
-                    actHandler.handleCommand( request);
-                    break;
-                case INFO_:
-                    // INFO command 처리
-                    InfoCommandRequestHandler infHandle=
-                       new InfoCommandRequestHandler( context, applicationContext, environment);
-                    infHandle.handleCommand( request);
-                    break;
-                case PUT_:
-                case DELETE_:
-                case GET_:
-                case LIST_:
-                    // RESOURCE command {PUT | DELETE | GET | LIST} 처리
-                    ResourceCommandRequestHandler rsHandler= 
-                      new ResourceCommandRequestHandler( context, applicationContext, environment);
-                    rsHandler.handleCommand( request);
-                    break;
-                case TRANSFER_:
-                    // TRANSFER command {PUT | DELETE | GET | LIST} 처리
-                    TransferCommandRequestHandler trHandler=
-                       new TransferCommandRequestHandler( context, applicationContext, environment);
-                    trHandler.handleCommand( request);
-                    break;
-            }
-            /// Agent 후처리기 호출
-            if( !postProcesses( context))
-                return;
-
-                // Agent 완료처리기 호출
-            if( !afterCompletions( context))
-                return;
-
-            if( closeRequired( request.headers()))
-                context.writeAndFlush( EMPTY_BUFFER).addListener( CLOSE);
-            return;
-        }
-        
-        if( message instanceof TransferMessage) // 프레임의 헤더 부분 read
-            request= (TransferMessage)message;
-        else if( message instanceof TransferContent)    // 프레임의 파일 컨텐트 부분 read
-        {
-            ...
-        }
-    }
-}    
-
-```
 
 ## 시연 내용과 방법 ##
 

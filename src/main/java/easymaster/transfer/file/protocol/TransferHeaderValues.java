@@ -18,6 +18,7 @@ public final class TransferHeaderValues
 
     public static final AsciiString CHUNKED= AsciiString.cached( "chunked");
 
+    // 파일 전송 처리시 비동기 전송 후 처리중 응답 또는 전송 완료 후 결과 응답 여부
     public static final AsciiString VALIDATION_ON= AsciiString.cached( "on");
 
     public static final AsciiString VALIDATION_OFF= AsciiString.cached( "off");
