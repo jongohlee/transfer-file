@@ -1,44 +1,12 @@
 @echo off
-@REM Startup script for a spring boot project
-@REM
 @REM description: Transfer File Agent
-
-:skipRcPre
 
 @setlocal
 
 set ERROR_CODE=0
 
-@REM To isolate internal variables from possible post scripts, we use another setlocal
-@setlocal
-
-@REM ==== START VALIDATION ====
-@REM if not "%JAVA_HOME%" == "" goto OkJHome
-
-@REM echo.
-@REM echo Error: JAVA_HOME not found in your environment. >&2
-@REM echo Please set the JAVA_HOME variable in your environment to match the >&2
-@REM echo location of your Java installation. >&2
-@REM echo.
-@REM goto error
-
-@REM :OkJHome
-@REM if exist "%JAVA_HOME%\bin\java.exe" goto init
-
-@REM echo.
-@REM echo Error: JAVA_HOME is set to an invalid directory. >&2
-@REM echo JAVA_HOME = "%JAVA_HOME%" >&2
-@REM echo Please set the JAVA_HOME variable in your environment to match the >&2
-@REM echo location of your Java installation. >&2
-@REM echo.
-@REM goto error
-
-@REM ==== END VALIDATION ====
-
-@REM :init
-
 set APP_NAME=transfer-file
-@REM set JAVA_EXEC=%JAVA_HOME%\bin\java
+@REM set JAVA_EXEC=C:\Program Files\Java\jdk-11.0.9\bin\java
 set JAVA_EXEC=java
 
 set APP_JAR=lib\transfer-file.jar
@@ -60,6 +28,7 @@ goto end
 :onStart
 
 set SESSIONNAME=Console
+@REM  프로세스 제어를 위해 INSTANCE ID를 생성
 set INSTANCE=%DATE:~0,4%%DATE:~5,2%%DATE:~8,2%%TIME:~0,2%%TIME:~3,2%%TIME:~6,2%%TIME:~9,2%%RANDOM%
 echo Instance: %INSTANCE%
 set JAVA_OPTS=%JAVA_OPTS% -DWCID=%INSTANCE%
@@ -73,7 +42,7 @@ FOR /F %%T IN ('Wmic process where "Name="java.exe" and CommandLine Like '%%%INS
 SET /A CUR_PID=%%T) &GOTO SkipLine
 :SkipLine
 
-echo %CUR_PID%   
+echo PID: %CUR_PID%   
 
 if exist %PID_FS% del /Q %PID_FS%
 echo %CUR_PID% >> %PID_FS%
@@ -84,23 +53,25 @@ goto end
 
 echo Stopping %APP_NAME%
 if not exist %PID_FS% (
-		echo %APP_NAME% is not running...
-		goto error
-	)
+        echo %APP_NAME% is not running...
+        goto error
+    )
 
 set /p PS=< %PID_FS%
 del /Q %PID_FS%
-Taskkill /PID %PS% /F
+Wmic process where "Name="java.exe" and CommandLine Like '%%%INSTANCE%%%'" delete
+rem Taskkill /PID %PS% /F
+
 
 goto end
 
 :onStatus
 
 if exist %PID_FS% (
-		set /p PS=< %PID_FS%
-		echo %APP_NAME% pid %PS% is running...
-		goto end
-	)
+        set /p PS=< %PID_FS%
+        echo %APP_NAME% pid %PS% is running...
+        goto end
+    )
 
 echo %APP_NAME% is stopped
 goto end

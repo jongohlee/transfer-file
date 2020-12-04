@@ -1,150 +1,174 @@
 # Transfer File Agent
 
-BXI EAI, FEP, MCI 등의 시스템에서 노드간 파일 전송을 서비스하기 위해 각 노드에 설치 운영되는 TCP/IP기반 에이전트
-
-에이전트 서버와 클라이언트 구현에 사용되는 메시지 프로토콜과 세부 구현 사항은 다음 문서를 참고한다. 아래 문서를 신규 API의 작성과 사이트 커스터마이징을 위해 필요한 주요 정보를 포함한다.
+Transfer File Agent는 EAI, FEP,  Batch 등 단위시스템에  설치되어 서버간 파일 전송을 처리하는 TCP/IP 기반 서버 에이전트 입니다.   
  
-**Developer documentation: [Developer Guide](DEVELOPER.md)**
- 
-## Installation
+ ### 기술 스택  ###
 
-### Step 1. unpack
+  - 자바로 작성되어 있으며 배포/ 실행 편의성을 위해 Spring-boot, Spring Framework를 사용하였습니다.  
+  - 비동기 입출력 처리를 위해 Netty Framework를 사용하였습니다.
+  -  빌드 배포와 의존성 관리를 위해 Gradle 을 사용하였습니다.
 
-프로젝트 Base Directory/dist 위치에 다음의 배포용 파일이 포함되어 있다.
- * bxi-file-agent-1.0.1-prod.tar.bz2
- * bxi-file-agent-1.0.1-prod.tar.gz
- * bxi-file-agent-1.0.1-prod.zip
+### 구성 ###
 
-Agent의 서버를 설치하기 위해서는 배포 파일을 목표 시스템의 설치 위치에 압축 해제한다.
-배포 파일은 설치위치에 다음의 디렉토리 구조를 생성한다.
+산출물은 Transfer File Agent와 Client library로 구성되어 있으며 각각 다음의 역할울 수행합니다.
 
-```
-.
-..
-├── bxi-file-agent-1.0.1
-│   ├── config
-│   │   ├── application.yml
-│   │   ├── bxi-file-agent.conf 
-│   │   ├── custom-context.xml
-│   ├── lib
-│   │   └── bxi-file-agent.jar
-│   ├── agent-boot.sh
-│   ├── agent-boot.bat
-│   ├── bxi-file-agent.service.exe
-│   ├── bxi-file-agent.service.xml
-│   ├── bxi-file-agent.NET2.exe  
-│   ├── bxi-file-agent.NET4.exe
-│   ├── README.md
-└───└── DEVELOPER.md
-```
- * application.yml : Agent Server 실행을 위한 주요 설정파일
- * bxi-file-agent.conf : executable jar(bxi-file-agent.jar)파일이 init.d Service로 등록되어 실행될 때 사용되는 환경변수 파일
- * custom-context.xml : 적용 환경에 맞게 커스터마이징된 Bean 등록 파일, spring application context
- * bxi-file-agent.jar : executable jar파일로 실행을 위해 필요한 클래스들과 의존 라이브러리를 포함
- * agent-boot.sh : Unix/Linux System 환경에서 command line으로 Agent Server를 실행하기 위한 쉘 파일
- * agent-boot.bat : Windows System 환경에서 command line으로 Agent Server를 실행하기 위한 배치 파일
- * bxi-file-agent.service.exe : Windows System에 Agent Server를 서비스로 등록하기 위한 실행 파일(= bxi-file-agent.NET4.exe)
- * bxi-file-agent.service.xml : Windows System에 Agent Server를 서비스로 등록하기 위한 설정 파일
- * bxi-file-agent.NET2.exe : .NET2만을 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 [bxi-file-agent.service.exe]로 이름을 변경하여 사용
- * bxi-file-agent.NET4.exe : .NET4를 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 [bxi-file-agent.service.exe]로 이름을 변경하여 사용
- 
-### Step 2. configuration
-application.yml파일을 수정하여 Agent Server 실행을 위해 필요한 주요 설정 항목을 작성한다. 대부분의 경우 미리 작성되어 있는 내용을 그대로 적용하며 아래 강조되어 있는 내용은 반드시 실행 환경에 맞게 수정되어야 한다.
+-  Transfer File Agent : TCP/IP 서버로 단위 시스템에 설치되어 파일의 송수신을 처리합니다.
+-  Client lIbrary : 단위 시스템에 라이브러리로 포함되거나 단일 클라이언트로 작성되어 다음 역할을 수행합니다.
+   -  Agent로 파일을 전송
+   - Agent에서 파일을 수신
+   - Agent간의 파일 전송 명령을 전달
+   - Agent의 상태를 확인하고 제어 명령을 전달
 
-<pre><code>
+
+## Transfer Agent `(Server)` 설치 ##
+
+프로젝트 Base Directory/dist에 포함된 배포 파일을 이용하여 File Transfer Agent를 설치합니다.
+
+- transfer-file-${version}-${commitId}-prod.zip : 서버 에이전트 설치를 위한 라이브러리, 설정, 실행파일
+- transfer-file-${version}-${commitId}-prod.zip : 클라이언트 라이브러리와 테스트 도구
+
+### Step 1 ###
+
+설치 위치로 이동하여 *-prod.zip 파일의 압축을 해제합니다. 배포 파일은 설치위치에 다음의 디렉토리 구조를 생성합니다.
+
+>```
+>.
+>..
+>├── ${install_dirctrory}
+>│   ├── config
+>│   │   ├── transfer-file.yml
+>│   │   ├── transfer-file.conf 
+>│   │   ├── custom-context.xml
+>│   ├── lib
+>│   │   └── transfer-file.jar
+>│   ├── README.md
+>│   ├── agent-boot.sh
+>│   ├── agent-boot.bat
+>│   ├── transfer-file.service.exe
+>│   ├── transfer-file.service.xml
+>│   ├── transfer-file.NET2.exe  
+>└─└── transfer-fileNET4.exe
+
+ - transfer-file.yml : Agent Server를 위한 설정파일
+ - transfer-file.conf : executable jar(transfer-file.jar)파일이 init.d Service로 등록되어 실행될 때 사용되는 환경변수 파일
+ - custom-context.xml : 적용 환경에 맞게 커스터마이징된 Bean 등록 파일로 파일 전송간 선후처리기를 등록
+ - transfer-file.jar : executable jar파일로 실행을 위해 필요한 클래스들과 의존 라이브러리들을 포함
+ - agent-boot.sh : Linux System 환경에서 command line으로 Agent Server를 실행하기 위한 shell 파일
+ - agent-boot.bat : Windows System 환경에서 command line으로 Agent Server를 실행하기 위한 배치 파일
+ - transfer-file.service.exe : Windows System에 Agent Server를 서비스로 등록하기 위한 실행 파일(transfer-file.NET4.exe파일과 동일)
+ - transfer-file.service.xml : Windows System에 Agent Server를 서비스로 등록하기 위한 설정 파일
+ - transfer-file.NET2.exe : .NET2만을 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `bxi-file-agent.service.exe`로 이름을 변경하여 사용
+ - transfer-file.NET4.exe : .NET4를 지원하는 Windows 환경에서 사용되는 서비스 등록 실행 파일로 필요한 경우 `bxi-file-agent.service.exe`로 이름을 변경하여 사용
+
+### Step 2 ###
+
+./config/tranfer-file.yml파일을 수정하여 Agent Server 실행을 위해 필요한 설정 항목을 수정한다. 대부분의 경우 미리 작성되어 있는 내용을 그대로 적용합니다.
+
+```yaml
 spring:
   main:
     web-application-type: none
     banner-mode: "off"
   application:
-    name: BXIFileAgent
-
+    name: transfer-file
+    
 logging:
-  file: logs/bxi-file-agent.log # recommended
+  file: logs/transfer-file.log
   level: 
     root: INFO
     org.springframework: INFO
     io.netty: INFO
-    org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: INFO
+    easymaster: DEBUG
 
 context:
    location: file:./config # fixed, can not edit
 
-agent:
-  connect-timeout-millis: 2000
-  # default 120 min, 요청별로 timeout seconds를 지정할 수 있으나 이를 지정하지 않은 경우 해당 설정을 최대 허용 시간으로 사용한다.
-  timeout-seconds: 7200 
-  ssl: on
-  <b>bind: 127.0.0.1 # agent server의 binding address</b>
-  <b>tcp-port: 8024 # agent server의 listen port</b>
-  boss-count: 1 # thread count for netty server socket
-  worker-count: 15 # thread count for socket
-  keep-alive: true
-  backlog: 100
-  chunk-size: 1048576 # default 1M bytes
-  # agent server 기동시 repository 설정항목을 검사하여 지정된 경로를 사용할 수 있는지 확인하고 필요한 경우 디렉토리를 생성한다.
-  validation: on 
-
-##################################################################################
-#
-# <b>repository 영역에는 다음 항목을 지정한다.</b>
-# 1. base-dir: 전송할 파일 위치와  파일을 저장하기 위한 기본 경로
-# 2. backup-dir: 파일 전송후 백업이 요청되고 요청에 백업 위치를 따로 지정하지 않은 경우 사용될 기본 백업 경로
-# 3. script-dir: 클라이언트 요청에 의해 요청 처리의 선후에 실행될 스크립트(python)파일의 위치
-# <b>repository하위의 sites 설정에는 업무별로 기본 경로를 분리하여 Agent server를 운영해야 할 경우 
-# 경로 집합을 site별로 지정한다.</b>
-# 
-##################################################################################
-
-  repository:
-    <b>base-dir: /home/easymaster/data/agent</b>
-    backup-dir: ${agent.repository.base-dir}/backup
-    script-dir: ${agent.repository.base-dir}/scripts
-    sites:
-      biz1: # unique id of site
-        name: siteOfBiz1
-        base-dir: ${agent.repository.base-dir}/biz1
-        backup-dir: ${agent.repository.base-dir}/biz1/backup
-        script-dir: ${agent.repository.base-dir}/biz1/scripts
-      biz2: # unique id of site
-        name: siteOfBiz2
-        base-dir: ${agent.repository.base-dir}/biz2
-        backup-dir: ${agent.repository.base-dir}/biz2/backup
-        script-dir: ${agent.repository.base-dir}/biz2/scripts
-      biz3: # unique id of site
-        name: siteOfBiz3
-        base-dir: ${agent.repository.base-dir}/biz3
-        backup-dir: ${agent.repository.base-dir}/biz3/backup
-        script-dir: ${agent.repository.base-dir}/biz3/scripts
-
-# fixed, can not edit below lines
 management:
   endpoint:
     shutdown: 
       enabled: true
-</code></pre>
- 
- 
-## Usage
-Agent server는 command line 또는 시스템 서비스 형태로 실행될 수 있다.
-배포된 패키지에는 운영환경에 따라 사용될 수 있는 command line control(start, stop, status) script와 시스템 서비스로 등록하여 운영할 때 사용할 수 있는 도구가 포함되어 있다.
+        
+transfer:
+   # 다른 Ageng로 연결할 때의 connection timeout
+  connect-timeout: 5s
+  # 대용량 파일 전송시에는 성능을 위해 파일을 분할하여 전송
+  # 분할 전송이 완료된 후 merge request를 전달하여 분할 전송된 파일을 병합
+  # 이 과정을 하나의 세션으로  처리하고 있으며 전체 과정 중 오류 및 지연이 발생하는 경우 
+  # Session timeout을 두어 분할 전송된 파일들을 일괄 제거하고 전송 실패로 처리
+  session-timeout: 30M
+  # default 120 min, 요청별로 timeout seconds를 지정할 수 있으나 이를 지정하지 않은 경우 아래에 지정된 최대 허용 시간으로 사용한다.
+  transfer-timeout: 120M
+  # ssl 적용 여부를 지정
+  ssl: on
+  bind: 127.0.0.1
+  tcp-port: 8024
+  boss-count: 1
+  worker-count: 15
+  keep-alive: true
+  backlog: 100
+  #하나의 파일 전송 메시지는 chunk단위로 나뉘어 전송
+  # 아래에 chunk size를 지정
+  chunk-size: 1048576 # 1M
+  # Agent 실행 시 파일 저장소 위치를  확인하고 디렉토리를 생성
+  # 파일 시스템 오류가 발생하는 경우 중단할 지 여부를 결정
+  validation: on
 
-### Logging
-설치된 Agent Server가 실행되면 설치 위치의 하위에 `logs` 디렉토리가 생성되고 `bxi-file-agent.log` 로그 파일과 제어를 위해 필요한 `.lock`, `.pid`파일이 생성된다.
-실행시 발생하는 정보는 로그 파일을 확인할 수 있다. 생성되는 로그 파일은 일별로 rolling된다. 로그 파일의 위치와 레벨은 `config/application.yml`파일을 수정하여 아래처럼 변경할 수 있다.
+  ##################################################################################
+  #  repository 영역에는 다음 항목을 지정합니다.
+  #    1. base-dir: 전송할 파일 위치와  수신된 파일을 저장하기 위한 기본 경로
+  #    2. backup-dir: 파일 전송후 백업이 요청파라미터에 포함되었으나 백업 위치를 따로 지정하지 않은 경우 사용될 기본 백업 경로
+  #  repository하위의 sites 설정에는 업무별로 기본 경로를 분리하여 Agent server를 운영해야 할 경우  경로 집합을 site별로 지정
+  ##################################################################################
+  repository:
+    base-dir: ./repositories
+    backup-dir: ${transfer.repository.base-dir}/backup
+    sites:
+      biz1:
+        name: siteOfBiz1
+        base-dir: ${transfer.repository.base-dir}/biz1
+        backup-dir: ${transfer.repository.base-dir}/biz1/backup
+      biz2:
+        name: siteOfBiz2
+        base-dir: ${transfer.repository.base-dir}/biz2
+        backup-dir: ${transfer.repository.base-dir}/biz2/backup
+      biz3:
+        name: siteOfBiz3
+        base-dir: ${transfer.repository.base-dir}/biz3
+        backup-dir: ${transfer.repository.base-dir}/biz3/backup
 
-<pre><code>
-logging:
-  file: logs/bxi-file-agent.log # recommended
-    level: 
-      <b>root: DEBUG</b>
-      org.springframework: INFO
-      io.netty: INFO
-      org.springframework.boot.autoconfigure.logging.ConditionEvaluationReportLoggingListener: INFO    
-</code></pre>
+```
+
+## Transfer Agent `(Server)` 실행 ##
+
+Agent server는 command line 또는 시스템 서비스 형태로 실행될 수 있습니다.  배포된 패키지에는 운영환경에 따라 사용될 수 있는 command line control(start, stop, status) script와 시스템 서비스로 등록하여 운영할 때 사용할 수 있는 도구가 포함되어 있습니다.
+### Windows System ###
+
+Window System에서는 다음 Command Line 도구 또는 System Service로 등록하여 Agent Server를 실행시킬 수 있습니다.
+#### Command Line ####
+
+배포된 패키지에 포함된 `agent-boot.bat`파일을 이용하여 Agent server를 실행합니다. 
+
+ -  Agent Server를 시작하기 위해서는 Windows에서 제공하는 Command Prompt (CMD)를 이용하여 설치 위치로 이동 후 아래 Command를 실행합니다.
+ ``` bash
+ agent-boot.bat start
+ ``` 
+
+- 다음 Command를 이용하여 실행 중인 Agent Server의 상태를 확인할 수 있습니다.
+``` bash
+agent-boot.bat status
+```
+ * 실행 중인 Agent Server는 다음 Command를 이용하여 중지한다.
+``` bash
+agent-boot.bat stop
+```
 
 
-### Microsoft Windows Operating System
+
+### Logging ###
+
+설치된 Agent Server가 실행되면 설치 위치의 하위에 `logs` 디렉토리가 생성되고 `transfer-file.log` 로그 파일과 프로세스 제어를 위해 필요한 `.lock`, `.pid`파일이 생성됩니다.  생성되는 로그 파일의 위치와 로깅 레벨은 `config/transfer--ile.yml`파일을 수정하여  변경할 수 있습니다.
+
+
 
 1. Command Line Control 
 

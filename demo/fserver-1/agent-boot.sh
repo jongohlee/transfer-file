@@ -1,12 +1,10 @@
 #!/bin/bash
-#
-# Startup script for a spring boot project
-#
+
 # description: Transfer File Agent
 
 # Source function library.
-[ -f "/etc/rc.d/init.d/functions" ] && . /etc/rc.d/init.d/functions
-[ -z "$JAVA_HOME" -a -x /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh
+#[ -f "/etc/rc.d/init.d/functions" ] && . /etc/rc.d/init.d/functions
+#[ -z "$JAVA_HOME" -a -x /etc/profile.d/java.sh ] && . /etc/profile.d/java.sh
 
 
 # the name of the project, will also be used for the war file, log file, ...
